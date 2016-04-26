@@ -1,1 +1,1 @@
-# core
+# eQuantic Core Library
