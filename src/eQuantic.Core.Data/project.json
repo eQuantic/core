@@ -1,5 +1,5 @@
 {
-  "version": "1.6.3",
+  "version": "1.6.5",
   "title": "eQuantic.Core.Data",
   "description": "eQuantic Core Data Class Library",
   "authors": [ "eQuantic Systems" ],
@@ -34,10 +34,10 @@
     }
   },
   "dependencies": {
-    "eQuantic.Core": {
-      "version": "1.4.3",
-      "target": "package"
-    }
+      "eQuantic.Core": {
+          "version": "1.4.4",
+          "target": "package"
+      }
   },
 
 

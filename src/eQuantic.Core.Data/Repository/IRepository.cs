@@ -120,44 +120,32 @@ namespace eQuantic.Core.Data.Repository
         IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification, params string[] loadProperties);
 
         /// <summary>
-        /// 
+        /// Count specified elements of type TEntity in repository
         /// </summary>
         /// <param name="specification"></param>
         /// <returns></returns>
         int Count(ISpecification<TEntity> specification);
 
         /// <summary>
-        /// 
+        /// Count filtered elements of type TEntity in repository
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
         int Count(Expression<Func<TEntity, bool>> filter);
 
         /// <summary>
-        /// 
+        /// Large count specified elements of type TEntity in repository
         /// </summary>
         /// <param name="specification"></param>
         /// <returns></returns>
         long LongCount(ISpecification<TEntity> specification);
 
         /// <summary>
-        /// 
+        /// Large count filtered elements of type TEntity in repository
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
         long LongCount(Expression<Func<TEntity, bool>> filter);
-
-        /// <summary>
-        /// Get all elements of type TEntity in repository
-        /// </summary>
-        /// <param name="pageIndex">Page index</param>
-        /// <param name="pageCount">Number of elements in each page</param>
-        /// <param name="orderByExpression">Order by expression for this query</param>
-        /// <param name="ascending">Specify if order is ascending</param>
-        /// <param name="loadProperties"></param>
-        /// <returns>List of selected elements</returns>
-        IEnumerable<TEntity> GetPaged<TProperty>(int pageIndex, int pageCount,
-            Expression<Func<TEntity, TProperty>> orderByExpression, bool ascending, params string[] loadProperties);
 
         /// <summary>
         /// Get all elements of type TEntity in repository
@@ -172,6 +160,18 @@ namespace eQuantic.Core.Data.Repository
             ISorting[] sortColumns, params string[] loadProperties);
 
         /// <summary>
+        /// Get all elements of type TEntity in repository
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount,
+            ISorting[] sortColumns, params string[] loadProperties);
+
+        /// <summary>
         /// Get  elements of type TEntity in repository
         /// </summary>
         /// <param name="filter">Filter that each element do match</param>
@@ -180,18 +180,42 @@ namespace eQuantic.Core.Data.Repository
         IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, params string[] loadProperties);
 
         /// <summary>
-        /// 
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns, params string[] loadProperties);
+
+        /// <summary>
+        /// Delete filtered elements of type TEntity in repository
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
         int DeleteMany(Expression<Func<TEntity, bool>> filter);
 
         /// <summary>
-        /// 
+        /// Delete specified elements of type TEntity in repository
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <returns></returns>
+        int DeleteMany(ISpecification<TEntity> specification);
+
+        /// <summary>
+        /// Update filtered elements of type TEntity in repository
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="updateExpression"></param>
         /// <returns></returns>
         int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateExpression);
+
+        /// <summary>
+        /// Update specified elements of type TEntity in repository
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="updateExpression"></param>
+        /// <returns></returns>
+        int UpdateMany(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateExpression);
     }
 }

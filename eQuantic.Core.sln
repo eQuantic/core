@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F72DED29-7BF7-4870-81B4-7AFE91270530}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
+		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "eQuantic.Core", "src\eQuantic.Core\eQuantic.Core.xproj", "{E6F4238E-42A3-4A46-B03D-781A76AC919C}"

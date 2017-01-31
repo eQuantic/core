@@ -317,8 +317,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <returns></returns>
         public int DeleteMany(Expression<Func<TEntity, bool>> filter)
         {
-            GetSet().RemoveRange(GetSet().Where(filter));
-            return 1;
+            return GetSet().Where(filter).Delete();
         }
 
         /// <summary>
