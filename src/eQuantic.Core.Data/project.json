@@ -1,0 +1,47 @@
+{
+  "version": "1.6.3",
+  "title": "eQuantic.Core.Data",
+  "description": "eQuantic Core Data Class Library",
+  "authors": [ "eQuantic Systems" ],
+
+
+  "packOptions": {
+    "owners": [ "eQuantic Systems" ],
+    "tags": [ "eQuantic", "Core", "Data", "Library", "Repository", "Pattern" ],
+    "projectUrl": "http://www.equantic.com.br",
+    "licenseUrl": "",
+    "iconUrl": "http://www.equantic.com.br/favicon.ico",
+    "releaseNotes": "Entity ignorant persistance with Repository Pattern",
+    "requireLicenseAcceptance": false,
+    "copyright": "Copyright 2017"
+  },
+  "frameworks": {
+    "net45": {
+    },
+    "net461": {
+    },
+    "net462": {
+    },
+    "netstandard1.3": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.3.0",
+        "System.Collections": "4.3.0",
+        "System.Linq": "4.3.0",
+        "System.Linq.Queryable": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Threading": "4.3.0"
+      }
+    }
+  },
+  "dependencies": {
+    "eQuantic.Core": {
+      "version": "1.4.3",
+      "target": "package"
+    }
+  },
+
+
+  "scripts": {
+    "postcompile": [ "dotnet pack --no-build --configuration Release --output ../../artifacts/pkg" ]
+  }
+}

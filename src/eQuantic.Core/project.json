@@ -1,0 +1,62 @@
+{
+  "copyright": "2017",
+  "version": "1.4.3",
+  "title": "eQuantic.Core",
+  "description": "eQuantic Core Library",
+  "authors": [ "eQuantic Systems" ],
+  
+  "packOptions": {
+    "copyright": "Copyright 2017",
+    "owners": [ "eQuantic Systems" ],
+    "tags": [ "eQuantic", "Core", "Library" ],
+    "projectUrl": "http://www.equantic.com.br",
+    "licenseUrl": "",
+    "iconUrl": "http://www.equantic.com.br/favicon.ico",
+    "releaseNotes": "Customed solutions for log, security, dependency injections, ...",
+    "requireLicenseAcceptance": false
+  },
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1"
+  },
+  "frameworks": {
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Text.RegularExpressions": "4.0.0.0"
+      }
+    },
+    "net461": {
+      "frameworkAssemblies": {
+        "System.Text.RegularExpressions": "4.0.10.0"
+      }
+    },
+    "net462": {
+      "frameworkAssemblies": {
+        "System.Text.RegularExpressions": "4.0.10.0"
+      }
+    },
+    "netstandard1.3": {
+      "dependencies": {
+        "System.Collections": "4.3.0",
+        "System.ComponentModel": "4.3.0",
+        "System.ComponentModel.Primitives": "4.3.0",
+        "System.ComponentModel.Annotations": "4.3.0",
+        "System.ComponentModel.TypeConverter": "4.3.0",
+        "System.Globalization": "4.3.0",
+        "System.Linq": "4.3.0",
+        "System.Linq.Queryable": "4.3.0",
+        "System.Reflection": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Security.Cryptography.Algorithms": "4.3.0",
+        "System.Text.Encoding": "4.3.0",
+        "System.Text.RegularExpressions": "4.3.0",
+        "System.Threading": "4.3.0",
+        "System.Threading.Thread": "4.3.0"
+      }
+    }
+  },
+
+
+  "scripts": {
+    "postcompile": [ "dotnet pack --no-build --configuration Release --output ../../artifacts/pkg" ]
+  }
+}
