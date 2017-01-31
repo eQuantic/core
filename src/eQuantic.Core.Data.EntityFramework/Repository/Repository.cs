@@ -135,10 +135,10 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// 
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="loadProperties"></param>
+        /// <param name="id"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <returns></returns>
         public TEntity Get(TKey id, params string[] loadProperties)
         {
@@ -235,44 +235,34 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             return GetSet().Count(specification.SatisfiedBy());
         }
 
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <returns></returns>
         public int Count(Expression<Func<TEntity, bool>> filter)
         {
             return GetSet().Count(filter);
         }
 
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <returns></returns>
         public long LongCount(ISpecification<TEntity> specification)
         {
             return GetSet().LongCount(specification.SatisfiedBy());
         }
 
-        public long LongCount(Expression<Func<TEntity, bool>> filter)
-        {
-            return GetSet().LongCount(filter);
-        }
-
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
-        /// <typeparam name="TProperty"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></typeparam>
-        /// <param name="pageIndex"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="pageCount"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="orderByExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="ascending"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
-        public IEnumerable<TEntity> GetPaged<TProperty>(int pageIndex, int pageCount, Expression<Func<TEntity, TProperty>> orderByExpression, bool @ascending,
-            params string[] loadProperties)
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public long LongCount(Expression<Func<TEntity, bool>> filter)
         {
-            var query = GetQueryable(loadProperties);
-            
-            if (ascending)
-                return query.OrderBy(orderByExpression)
-                          .Skip(pageCount * pageIndex)
-                          .Take(pageCount);
-            
-            return query.OrderByDescending(orderByExpression)
-                        .Skip(pageCount * pageIndex)
-                        .Take(pageCount);
+            return GetSet().LongCount(filter);
         }
 
         /// <summary>
@@ -287,7 +277,22 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount, ISorting[] sortColumns,
             params string[] loadProperties)
         {
-            var query = GetQueryable(loadProperties).Where(specification.SatisfiedBy());
+            return GetPaged(specification.SatisfiedBy(), pageIndex, pageCount, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="pageIndex"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="pageCount"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount, ISorting[] sortColumns,
+            params string[] loadProperties)
+        {
+            var query = GetQueryable(loadProperties).Where(filter);
 
             if (sortColumns != null && sortColumns.Length > 0)
             {
@@ -311,9 +316,26 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// 
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"></param>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns, params string[] loadProperties)
+        {
+            var query = GetQueryable(loadProperties).Where(filter);
+            if (sortColumns != null && sortColumns.Length > 0)
+            {
+                query = query.OrderBy(sortColumns);
+            }
+            return query;
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <returns></returns>
         public int DeleteMany(Expression<Func<TEntity, bool>> filter)
         {
@@ -321,14 +343,35 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// 
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="updateExpression"></param>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public int DeleteMany(ISpecification<TEntity> specification)
+        {
+            return DeleteMany(specification.SatisfiedBy());
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <returns></returns>
         public int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateExpression)
         {
             return GetSet().Where(filter).Update(updateExpression);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public int UpdateMany(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateExpression)
+        {
+            return UpdateMany(specification.SatisfiedBy(), updateExpression);
         }
 
         /// <summary>
