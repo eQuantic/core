@@ -76,9 +76,31 @@ namespace eQuantic.Core.Data.Repository
         /// Get element by entity key
         /// </summary>
         /// <param name="id"></param>
+        /// <returns></returns>
+        TEntity Get(TKey id);
+
+        /// <summary>
+        /// Get element by entity key
+        /// </summary>
+        /// <param name="id"></param>
         /// <param name="loadProperties"></param>
         /// <returns></returns>
         TEntity Get(TKey id, params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        TEntity Get(TKey id, params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        /// Get single element by criteria
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        TEntity GetSingle(Expression<Func<TEntity, bool>> filter);
 
         /// <summary>
         /// Get single element by criteria
@@ -89,6 +111,22 @@ namespace eQuantic.Core.Data.Repository
         TEntity GetSingle(Expression<Func<TEntity, bool>> filter, params string[] loadProperties);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        TEntity GetSingle(Expression<Func<TEntity, bool>> filter,
+            params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        /// Get first element by criteria
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        TEntity GetFirst(Expression<Func<TEntity, bool>> filter);
+
+        /// <summary>
         /// Get first element by criteria
         /// </summary>
         /// <param name="filter">Filter that each element do match</param>
@@ -97,10 +135,39 @@ namespace eQuantic.Core.Data.Repository
         TEntity GetFirst(Expression<Func<TEntity, bool>> filter, params string[] loadProperties);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        TEntity GetFirst(Expression<Func<TEntity, bool>> filter,
+            params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        /// Get all elements of type TEntity in repository
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetAll();
+
+        /// <summary>
         /// Get all elements of type TEntity in repository
         /// </summary>
         /// <returns>List of selected elements</returns>
         IEnumerable<TEntity> GetAll(params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        /// Get all elements of type TEntity in repository
+        /// </summary>
+        /// <param name="sortingColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetAll(ISorting[] sortingColumns);
 
         /// <summary>
         /// Get all elements of type TEntity in repository
@@ -111,6 +178,22 @@ namespace eQuantic.Core.Data.Repository
         IEnumerable<TEntity> GetAll(ISorting[] sortingColumns, params string[] loadProperties);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="sortingColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetAll(ISorting[] sortingColumns,
+            params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        /// Get all elements of type TEntity that matching a
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification);
+
+        /// <summary>
         /// Get all elements of type TEntity that matching a
         /// Specification <paramref name="specification"/>
         /// </summary>
@@ -118,6 +201,21 @@ namespace eQuantic.Core.Data.Repository
         /// <param name="loadProperties"></param>
         /// <returns></returns>
         IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification, params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification,
+            params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        int Count();
 
         /// <summary>
         /// Count specified elements of type TEntity in repository
@@ -134,6 +232,12 @@ namespace eQuantic.Core.Data.Repository
         int Count(Expression<Func<TEntity, bool>> filter);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        long LongCount();
+
+        /// <summary>
         /// Large count specified elements of type TEntity in repository
         /// </summary>
         /// <param name="specification"></param>
@@ -148,6 +252,140 @@ namespace eQuantic.Core.Data.Repository
         long LongCount(Expression<Func<TEntity, bool>> filter);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(int limit, ISorting[] sortColumns);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(int limit,
+            ISorting[] sortColumns, params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(int limit,
+            ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int limit,
+            ISorting[] sortColumns);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int limit,
+            ISorting[] sortColumns, params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int limit,
+            ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int limit,
+            ISorting[] sortColumns);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int limit,
+            ISorting[] sortColumns, params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int limit,
+            ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(int pageIndex, int pageCount, ISorting[] sortColumns);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(int pageIndex, int pageCount, ISorting[] sortColumns,
+            params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(int pageIndex, int pageCount, ISorting[] sortColumns,
+            params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount,
+            ISorting[] sortColumns);
+
+        /// <summary>
         /// Get all elements of type TEntity in repository
         /// </summary>
         /// <param name="specification"></param>
@@ -158,6 +396,29 @@ namespace eQuantic.Core.Data.Repository
         /// <returns></returns>
         IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount,
             ISorting[] sortColumns, params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount,
+            ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount,
+            ISorting[] sortColumns);
 
         /// <summary>
         /// Get all elements of type TEntity in repository
@@ -172,6 +433,25 @@ namespace eQuantic.Core.Data.Repository
             ISorting[] sortColumns, params string[] loadProperties);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount,
+            ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter);
+
+        /// <summary>
         /// Get  elements of type TEntity in repository
         /// </summary>
         /// <param name="filter">Filter that each element do match</param>
@@ -183,10 +463,38 @@ namespace eQuantic.Core.Data.Repository
         ///
         /// </summary>
         /// <param name="filter"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter,
+            params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortColumns"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
         /// <param name="sortColumns"></param>
         /// <param name="loadProperties"></param>
         /// <returns></returns>
-        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns, params string[] loadProperties);
+        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns,
+            params string[] loadProperties);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns,
+            params Expression<Func<TEntity, object>>[] loadProperties);
 
         /// <summary>
         /// Delete filtered elements of type TEntity in repository

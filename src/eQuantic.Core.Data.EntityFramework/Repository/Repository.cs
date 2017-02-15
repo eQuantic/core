@@ -7,6 +7,7 @@ using eQuantic.Core.Data.Repository;
 using eQuantic.Core.Extensions;
 using eQuantic.Core.Linq;
 using eQuantic.Core.Linq.Extensions;
+using eQuantic.Core.Linq.Helpers;
 using eQuantic.Core.Linq.Specification;
 using Microsoft.EntityFrameworkCore;
 using Z.EntityFramework.Plus;
@@ -169,10 +170,32 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
+        /// <param name="id"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public TEntity Get(TKey id, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return Get(id, GetPropertyNames(loadProperties));
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
         /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
         public TEntity GetSingle(Expression<Func<TEntity, bool>> filter, params string[] loadProperties)
+        {
+            return GetQueryable(loadProperties).SingleOrDefault(filter);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public TEntity GetSingle(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] loadProperties)
         {
             return GetQueryable(loadProperties).SingleOrDefault(filter);
         }
@@ -191,8 +214,29 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public TEntity GetFirst(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetQueryable(loadProperties).FirstOrDefault(filter);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
         /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
         public IEnumerable<TEntity> GetAll(params string[] loadProperties)
+        {
+            return GetQueryable(loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] loadProperties)
         {
             return GetQueryable(loadProperties);
         }
@@ -217,12 +261,49 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
+        /// <param name="sortingColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetAll(ISorting[] sortingColumns, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetAll(sortingColumns, GetPropertyNames(loadProperties));
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
         /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
         public IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification, params string[] loadProperties)
         {
+            if(specification == null)
+                throw new ArgumentException("Specification cannot be null", nameof(specification));
+
             return GetQueryable(loadProperties).Where(specification.SatisfiedBy());
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            if(specification == null)
+                throw new ArgumentException("Specification cannot be null", nameof(specification));
+
+            return GetQueryable(loadProperties).Where(specification.SatisfiedBy());
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <returns></returns>
+        public int Count()
+        {
+            return GetSet().Count();
         }
 
         /// <summary>
@@ -248,6 +329,15 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
+        /// <returns></returns>
+        public long LongCount()
+        {
+            return GetSet().LongCount();
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
         /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <returns></returns>
         public long LongCount(ISpecification<TEntity> specification)
@@ -268,6 +358,109 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(int limit, ISorting[] sortColumns, params string[] loadProperties)
+        {
+            return GetPaged((ISpecification<TEntity>)null, 1, limit, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(int limit, ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetPaged((ISpecification<TEntity>)null, 1, limit, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int limit, ISorting[] sortColumns, params string[] loadProperties)
+        {
+            return GetPaged(specification, 1, limit, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int limit, ISorting[] sortColumns,
+            params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetPaged(specification, 1, limit, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int limit, ISorting[] sortColumns, params string[] loadProperties)
+        {
+            return GetPaged(filter, 1, limit, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="limit"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int limit, ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetPaged(filter, 1, limit, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(int pageIndex, int pageCount, ISorting[] sortColumns, params string[] loadProperties)
+        {
+            return GetPaged((ISpecification<TEntity>)null, pageIndex, pageCount, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(int pageIndex, int pageCount, ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetPaged((ISpecification<TEntity>)null, pageIndex, pageCount, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
         /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <param name="pageIndex"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <param name="pageCount"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
@@ -277,7 +470,22 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount, ISorting[] sortColumns,
             params string[] loadProperties)
         {
-            return GetPaged(specification.SatisfiedBy(), pageIndex, pageCount, sortColumns, loadProperties);
+            return GetPaged(specification?.SatisfiedBy(), pageIndex, pageCount, sortColumns, loadProperties);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount, ISorting[] sortColumns,
+            params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetPaged(specification?.SatisfiedBy(), pageIndex, pageCount, sortColumns, loadProperties);
         }
 
         /// <summary>
@@ -292,7 +500,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount, ISorting[] sortColumns,
             params string[] loadProperties)
         {
-            var query = GetQueryable(loadProperties).Where(filter);
+            var query = filter != null ? GetQueryable(loadProperties).Where(filter) : GetQueryable(loadProperties);
 
             if (sortColumns != null && sortColumns.Length > 0)
             {
@@ -307,11 +515,43 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageCount"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount, ISorting[] sortColumns,
+            params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetPaged(filter, pageIndex, pageCount, sortColumns, GetPropertyNames(loadProperties));
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
         /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
         /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
         public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, params string[] loadProperties)
-        {            
+        {
+            if(filter == null)
+                throw new ArgumentException("Filter expression cannot be null", nameof(filter));
+
+            return GetQueryable(loadProperties).Where(filter);
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            if(filter == null)
+                throw new ArgumentException("Filter expression cannot be null", nameof(filter));
+
             return GetQueryable(loadProperties).Where(filter);
         }
 
@@ -324,12 +564,27 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <returns></returns>
         public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns, params string[] loadProperties)
         {
+            if(filter == null)
+                throw new ArgumentException("Filter expression cannot be null", nameof(filter));
+
             var query = GetQueryable(loadProperties).Where(filter);
             if (sortColumns != null && sortColumns.Length > 0)
             {
                 query = query.OrderBy(sortColumns);
             }
             return query;
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return GetFiltered(filter, sortColumns, GetPropertyNames(loadProperties));
         }
 
         /// <summary>
@@ -360,6 +615,9 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <returns></returns>
         public int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateExpression)
         {
+            if(updateExpression == null)
+                throw new ArgumentException("Expression cannot be null", nameof(updateExpression));
+
             return GetSet().Where(filter).Update(updateExpression);
         }
 
@@ -418,6 +676,37 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             return query;
         }
 
-#endregion
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        protected string[] GetPropertyNames(Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            var columnNames = new List<string>();
+            foreach (var loadProperty in loadProperties)
+            {
+                MemberExpression member;
+                if (loadProperty.Body is MemberExpression)
+                {
+                    member = (MemberExpression)loadProperty.Body;
+                }
+                else
+                {
+                    var op = ((UnaryExpression)loadProperty.Body).Operand;
+                    member = (MemberExpression)op;
+                }
+                columnNames.Add(PropertiesHelper.BuildColumnNameFromMemberExpression(member));
+            }
+            return columnNames.ToArray();
+        }
+
+        protected IQueryable<TEntity> GetQueryable(params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+
+            return GetQueryable(GetPropertyNames(loadProperties));
+        }
+
+        #endregion
     }
 }
