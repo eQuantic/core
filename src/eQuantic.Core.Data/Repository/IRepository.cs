@@ -144,6 +144,15 @@ namespace eQuantic.Core.Data.Repository
             params Expression<Func<TEntity, object>>[] loadProperties);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortingColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        TEntity GetFirst(Expression<Func<TEntity, bool>> filter, ISorting[] sortingColumns, params string[] loadProperties);
+
+        /// <summary>
         /// Get all elements of type TEntity in repository
         /// </summary>
         /// <returns></returns>

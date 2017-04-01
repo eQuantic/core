@@ -1,23 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0CA2F610-6D57-4D1F-92E3-EDCCEDAD8297}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F72DED29-7BF7-4870-81B4-7AFE91270530}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "eQuantic.Core", "src\eQuantic.Core\eQuantic.Core.xproj", "{E6F4238E-42A3-4A46-B03D-781A76AC919C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core", "src\eQuantic.Core\eQuantic.Core.csproj", "{E6F4238E-42A3-4A46-B03D-781A76AC919C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "eQuantic.Core.Data", "src\eQuantic.Core.Data\eQuantic.Core.Data.xproj", "{CB16F7E3-5CCA-4346-89F0-6E1CDEB81DFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core.Data", "src\eQuantic.Core.Data\eQuantic.Core.Data.csproj", "{CB16F7E3-5CCA-4346-89F0-6E1CDEB81DFC}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "eQuantic.Core.Web", "src\eQuantic.Core.Web\eQuantic.Core.Web.xproj", "{4347EC29-7F37-43C7-9B54-A3891341220C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core.Web", "src\eQuantic.Core.Web\eQuantic.Core.Web.csproj", "{4347EC29-7F37-43C7-9B54-A3891341220C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "eQuantic.Core.Data.EntityFramework", "src\eQuantic.Core.Data.EntityFramework\eQuantic.Core.Data.EntityFramework.xproj", "{CB4BD082-A5A5-4E9D-A226-1C7B8C505CC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core.Data.EntityFramework", "src\eQuantic.Core.Data.EntityFramework\eQuantic.Core.Data.EntityFramework.csproj", "{CB4BD082-A5A5-4E9D-A226-1C7B8C505CC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,27 +49,5 @@ Global
 		{CB16F7E3-5CCA-4346-89F0-6E1CDEB81DFC} = {0CA2F610-6D57-4D1F-92E3-EDCCEDAD8297}
 		{4347EC29-7F37-43C7-9B54-A3891341220C} = {0CA2F610-6D57-4D1F-92E3-EDCCEDAD8297}
 		{CB4BD082-A5A5-4E9D-A226-1C7B8C505CC2} = {0CA2F610-6D57-4D1F-92E3-EDCCEDAD8297}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://equantic.visualstudio.com/defaultcollection
-		SccProjectUniqueName0 = src\\eQuantic.Core\\eQuantic.Core.xproj
-		SccProjectTopLevelParentUniqueName0 = eQuantic.Core.sln
-		SccProjectName0 = src/eQuantic.Core
-		SccLocalPath0 = src\\eQuantic.Core
-		SccProjectUniqueName1 = src\\eQuantic.Core.Data\\eQuantic.Core.Data.xproj
-		SccProjectTopLevelParentUniqueName1 = eQuantic.Core.sln
-		SccProjectName1 = src/eQuantic.Core.Data
-		SccLocalPath1 = src\\eQuantic.Core.Data
-		SccLocalPath2 = .
-		SccProjectUniqueName3 = src\\eQuantic.Core.Data.EntityFramework\\eQuantic.Core.Data.EntityFramework.xproj
-		SccProjectTopLevelParentUniqueName3 = eQuantic.Core.sln
-		SccProjectName3 = src/eQuantic.Core.Data.EntityFramework
-		SccLocalPath3 = src\\eQuantic.Core.Data.EntityFramework
-		SccProjectUniqueName4 = src\\eQuantic.Core.Web\\eQuantic.Core.Web.xproj
-		SccProjectTopLevelParentUniqueName4 = eQuantic.Core.sln
-		SccProjectName4 = src/eQuantic.Core.Web
-		SccLocalPath4 = src\\eQuantic.Core.Web
 	EndGlobalSection
 EndGlobal

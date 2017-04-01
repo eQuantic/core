@@ -222,6 +222,11 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             return GetQueryable(loadProperties).FirstOrDefault(filter);
         }
 
+        public TEntity GetFirst(Expression<Func<TEntity, bool>> filter, ISorting[] sortingColumns, params string[] loadProperties)
+        {
+            return GetQueryable(loadProperties).OrderBy(sortingColumns).FirstOrDefault(filter);
+        }
+
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
         /// </summary>

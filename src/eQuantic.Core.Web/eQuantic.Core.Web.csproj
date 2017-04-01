@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>eQuantic Core Web Library</Description>
+    <Copyright>Copyright 2016</Copyright>
+    <Authors>eQuantic Systems</Authors>
+    <TargetFramework>net45</TargetFramework>
+    <AssemblyName>eQuantic.Core.Web</AssemblyName>
+    <PackageId>eQuantic.Core.Web</PackageId>
+    <PackageTags>eQuantic;Core;Library</PackageTags>
+    <PackageReleaseNotes>Customed solutions for web projects ...</PackageReleaseNotes>
+    <PackageIconUrl>http://www.equantic.com.br/favicon.ico</PackageIconUrl>
+    <PackageProjectUrl>http://www.equantic.com.br</PackageProjectUrl>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eQuantic.Core\eQuantic.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System.Web" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

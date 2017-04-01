@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("eQuantic.Core.Data")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Entity ignorant persistance with Repository Pattern")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("eQuantic Systems")]
 [assembly: AssemblyProduct("eQuantic.Core.Data")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
