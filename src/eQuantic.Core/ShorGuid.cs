@@ -51,41 +51,30 @@ namespace eQuantic.Core
 
 		#endregion
 
-		#region Properties
+		#region Methods
 
-		/// <summary>
-		/// Gets/sets the underlying Guid
-		/// </summary>
-		[JsonIgnore]
-		public Guid Guid
-		{
-			get { return _guid; }
-			set
-			{
-				if (value != _guid)
-				{
-					_guid = value;
-					_value = Encode(value);
-				}
-			}
-		}
+        public Guid ToGuid()
+        {
+            return _guid;
+        }
 
-        /// <summary>
-        /// Gets/sets the underlying base64 encoded string
-        /// </summary>
-        [JsonIgnore]
-        public string Value
-		{
-			get { return _value; }
-			set
-			{
-				if (value != _value)
-				{
-					_value = value;
-					_guid = Decode(value);
-				}
-			}
-		}
+        public void SetGuid(Guid value)
+        {
+            if (value != _guid)
+            {
+                _guid = value;
+                _value = Encode(value);
+            }
+        }
+
+        public void SetValue(string value)
+        {
+            if (value != _value)
+            {
+                _value = value;
+                _guid = Decode(value);
+            }
+        }
 
 		#endregion
 
@@ -267,12 +256,12 @@ namespace eQuantic.Core
 
 	    public int CompareTo(object obj)
 	    {
-	        return Guid.CompareTo(((ShortGuid)obj).Guid);
+	        return _guid.CompareTo(((ShortGuid)obj).ToGuid());
 	    }
 
         public int CompareTo(ShortGuid other)
         {
-            return Guid.CompareTo(other.Guid);
+            return _guid.CompareTo(other.ToGuid());
         }
 
         public bool Equals(ShortGuid other)
