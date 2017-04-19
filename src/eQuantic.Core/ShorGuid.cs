@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace eQuantic.Core
 {
@@ -6,8 +7,8 @@ namespace eQuantic.Core
 	/// Represents a globally unique identifier (GUID) with a 
 	/// shorter string value. Sguid
 	/// </summary>
-	public struct ShortGuid
-	{
+	public struct ShortGuid : IComparable, IComparable<ShortGuid>, IEquatable<ShortGuid>
+    {
 		#region Static
 
 		/// <summary>
@@ -55,6 +56,7 @@ namespace eQuantic.Core
 		/// <summary>
 		/// Gets/sets the underlying Guid
 		/// </summary>
+		[JsonIgnore]
 		public Guid Guid
 		{
 			get { return _guid; }
@@ -68,10 +70,11 @@ namespace eQuantic.Core
 			}
 		}
 
-		/// <summary>
-		/// Gets/sets the underlying base64 encoded string
-		/// </summary>
-		public string Value
+        /// <summary>
+        /// Gets/sets the underlying base64 encoded string
+        /// </summary>
+        [JsonIgnore]
+        public string Value
 		{
 			get { return _value; }
 			set
@@ -262,6 +265,20 @@ namespace eQuantic.Core
 			return new ShortGuid(guid);
 		}
 
-		#endregion
+	    public int CompareTo(object obj)
+	    {
+	        return Guid.CompareTo(((ShortGuid)obj).Guid);
+	    }
+
+        public int CompareTo(ShortGuid other)
+        {
+            return Guid.CompareTo(other.Guid);
+        }
+
+        public bool Equals(ShortGuid other)
+        {
+            return this == other;
+        }
+        #endregion
 	}
 }
