@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using eQuantic.Core.Data.Repository;
+using eQuantic.Core.Data.Repository.Sql;
 using eQuantic.Core.Extensions;
 using eQuantic.Core.Linq;
 using eQuantic.Core.Linq.Extensions;
@@ -18,14 +19,15 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
     /// Repository base class
     /// </summary>
     /// <typeparam name="TEntity">The type of underlying entity in this repository</typeparam>
-    /// <typeparam name="TKey"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></typeparam>
-    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
+    /// <typeparam name="TKey"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></typeparam>
+    public class Repository<TUnitOfWork, TEntity, TKey> : IRepository<TUnitOfWork, TEntity, TKey>
+        where TUnitOfWork : IQueryableUnitOfWork
         where TEntity : class, IEntity
     {
 
         #region Members
 
-        readonly IQueryableUnitOfWork _unitOfWork;
+        readonly TUnitOfWork _unitOfWork;
 
         #endregion
 
@@ -35,9 +37,9 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// Create a new instance of repository
         /// </summary>
         /// <param name="unitOfWork">Associated Unit Of Work</param>
-        public Repository(IQueryableUnitOfWork unitOfWork)
+        public Repository(TUnitOfWork unitOfWork)
         {
-            if (unitOfWork == (IUnitOfWork)null)
+            if (unitOfWork == null)
                 throw new ArgumentNullException(nameof(unitOfWork));
 
             _unitOfWork = unitOfWork;
@@ -48,14 +50,14 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         #region IRepository Members
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        public IUnitOfWork UnitOfWork => _unitOfWork;
+        public TUnitOfWork UnitOfWork => _unitOfWork;
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         public virtual void Add(TEntity item)
         {
 
@@ -70,9 +72,9 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
 
         }
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         public virtual void Remove(TEntity item)
         {
             if (item != (TEntity)null)
@@ -91,9 +93,9 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         public virtual void TrackItem(TEntity item)
         {
             if (item != (TEntity)null)
@@ -106,9 +108,9 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="item"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         public virtual void Modify(TEntity item)
         {
             if (item != (TEntity)null)
@@ -121,27 +123,33 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="id"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="force"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
-        public virtual TEntity Get(TKey id, bool force = false)
+        /// <param name="id"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="force"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></returns>
+        public virtual TEntity Get(TKey id, bool force)
         {
-            var item = Get(id, new string[0]);
+            return Get(id, force, new string[0]);
+        }
 
-            if (force) _unitOfWork.Reload(item);
-
-            return item;
+        public TEntity Get(TKey id)
+        {
+            return Get(id, false, new string[0]);
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="id"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="id"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public TEntity Get(TKey id, params string[] loadProperties)
+        {
+            return Get(id, false, loadProperties);
+        }
+
+        public TEntity Get(TKey id, bool force, params string[] loadProperties)
         {
             if (id != null)
             {
@@ -152,45 +160,77 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
                     {
                         if (!string.IsNullOrEmpty(property))
                         {
-#if NETSTANDARD1_3
-                            var prop = item.GetType().GetTypeInfo().GetDeclaredProperty(property);
-#else
-                            var prop = item.GetType().GetProperty(property);
-#endif
-                            prop?.GetValue(item);
+                            var props = property.Split('.');
+
+                            if (props.Length == 1)
+                            {
+                                _unitOfWork.LoadProperty(item, property);
+                            }
+                            else
+                            {
+                                LoadCascade(props, item);
+                            }
                         }
                     }
                 }
+                if (force) _unitOfWork.Reload(item);
                 return item;
             }
             else
                 return null;
         }
 
+        protected void LoadCascade(string[]props, object obj, int index = 0)
+        {
+#if NETSTANDARD1_3
+            var prop = obj.GetType().GetTypeInfo().GetDeclaredProperty(props[index]);
+#else
+            var prop = obj.GetType().GetProperty(props[index]);
+#endif
+            var nextObj = prop?.GetValue(obj);
+            if (nextObj == null)
+            {
+                _unitOfWork.LoadProperty(obj, props[index]);
+                nextObj = prop?.GetValue(obj);
+            }
+
+            if(props.Length > index+1) LoadCascade(props, nextObj, index+1);
+        }
+
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="loadProperties"></param>
         /// <returns></returns>
         public TEntity Get(TKey id, params Expression<Func<TEntity, object>>[] loadProperties)
         {
-            return Get(id, GetPropertyNames(loadProperties));
+            return Get(id, false, GetPropertyNames(loadProperties));
+        }
+
+        public TEntity Get(TKey id, bool force, params Expression<Func<TEntity, object>>[] loadProperties)
+        {
+            return Get(id, force, GetPropertyNames(loadProperties));
+        }
+
+        public TEntity GetSingle(Expression<Func<TEntity, bool>> filter)
+        {
+            return GetSingle(filter, new Expression<Func<TEntity, object>>[0]);
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></returns>
         public TEntity GetSingle(Expression<Func<TEntity, bool>> filter, params string[] loadProperties)
         {
             return GetQueryable(loadProperties).SingleOrDefault(filter);
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="loadProperties"></param>
@@ -200,19 +240,24 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             return GetQueryable(loadProperties).SingleOrDefault(filter);
         }
 
+        public TEntity GetFirst(Expression<Func<TEntity, bool>> filter)
+        {
+            return GetFirst(filter, new Expression<Func<TEntity, object>>[0]);
+        }
+
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></returns>
         public TEntity GetFirst(Expression<Func<TEntity, bool>> filter, params string[] loadProperties)
         {
             return GetQueryable(loadProperties).FirstOrDefault(filter);
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="loadProperties"></param>
@@ -227,17 +272,27 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             return GetQueryable(loadProperties).OrderBy(sortingColumns).FirstOrDefault(filter);
         }
 
+        public IEnumerable<TEntity> GetAll()
+        {
+            return GetQueryable(new Expression<Func<TEntity, object>>[0]);
+        }
+
+        public IEnumerable<TEntity> GetAll(ISorting[] sortingColumns)
+        {
+            return GetAll(sortingColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
+        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></returns>
         public IEnumerable<TEntity> GetAll(params string[] loadProperties)
         {
             return GetQueryable(loadProperties);
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="loadProperties"></param>
         /// <returns></returns>
@@ -247,10 +302,10 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="sortingColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="sortingColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public IEnumerable<TEntity> GetAll(ISorting[] sortingColumns, params string[] loadProperties)
         {
@@ -264,7 +319,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="sortingColumns"></param>
         /// <param name="loadProperties"></param>
@@ -274,12 +329,17 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             return GetAll(sortingColumns, GetPropertyNames(loadProperties));
         }
 
+        public IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification)
+        {
+            return AllMatching(specification, new Expression<Func<TEntity, object>>[0]);
+        }
+
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></returns>
         public IEnumerable<TEntity> AllMatching(ISpecification<TEntity> specification, params string[] loadProperties)
         {
             if(specification == null)
@@ -289,7 +349,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="specification"></param>
         /// <param name="loadProperties"></param>
@@ -303,65 +363,66 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <returns></returns>
-        public int Count()
-        {
-            return GetSet().Count();
-        }
-
-        /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
-        /// </summary>
-        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns></returns>
-        public int Count(ISpecification<TEntity> specification)
-        {
-            return GetSet().Count(specification.SatisfiedBy());
-        }
-
-        /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
-        /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns></returns>
-        public int Count(Expression<Func<TEntity, bool>> filter)
-        {
-            return GetSet().Count(filter);
-        }
-
-        /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
-        /// </summary>
-        /// <returns></returns>
-        public long LongCount()
+        public long Count()
         {
             return GetSet().LongCount();
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public long LongCount(ISpecification<TEntity> specification)
+        public long Count(ISpecification<TEntity> specification)
         {
             return GetSet().LongCount(specification.SatisfiedBy());
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public long LongCount(Expression<Func<TEntity, bool>> filter)
+        public long Count(Expression<Func<TEntity, bool>> filter)
         {
             return GetSet().LongCount(filter);
         }
 
+        public IEnumerable<TEntity> GetPaged(int limit, ISorting[] sortColumns)
+        {
+            return GetPaged(limit, sortColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
+        public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int limit, ISorting[] sortColumns)
+        {
+            return GetPaged(specification, limit, sortColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
+        public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int limit, ISorting[] sortColumns)
+        {
+            return GetPaged(filter, limit, sortColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
+        public IEnumerable<TEntity> GetPaged(int pageIndex, int pageCount, ISorting[] sortColumns)
+        {
+            return GetPaged(pageIndex, pageCount, sortColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
+        public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount, ISorting[] sortColumns)
+        {
+            return GetPaged(specification, pageIndex, pageCount, sortColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
+        public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount, ISorting[] sortColumns)
+        {
+            return GetPaged(filter, pageIndex, pageCount, sortColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="limit"></param>
         /// <param name="sortColumns"></param>
@@ -373,7 +434,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="limit"></param>
         /// <param name="sortColumns"></param>
@@ -385,7 +446,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="specification"></param>
         /// <param name="limit"></param>
@@ -398,7 +459,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="specification"></param>
         /// <param name="limit"></param>
@@ -412,7 +473,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="limit"></param>
@@ -425,7 +486,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="limit"></param>
@@ -438,7 +499,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="pageCount"></param>
@@ -451,7 +512,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="pageCount"></param>
@@ -464,13 +525,13 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="pageIndex"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="pageCount"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="pageIndex"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="pageCount"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public IEnumerable<TEntity> GetPaged(ISpecification<TEntity> specification, int pageIndex, int pageCount, ISorting[] sortColumns,
             params string[] loadProperties)
@@ -479,7 +540,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="specification"></param>
         /// <param name="pageIndex"></param>
@@ -494,13 +555,13 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="pageIndex"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="pageCount"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="pageIndex"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="pageCount"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public IEnumerable<TEntity> GetPaged(Expression<Func<TEntity, bool>> filter, int pageIndex, int pageCount, ISorting[] sortColumns,
             params string[] loadProperties)
@@ -518,7 +579,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="pageIndex"></param>
@@ -532,12 +593,22 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             return GetPaged(filter, pageIndex, pageCount, sortColumns, GetPropertyNames(loadProperties));
         }
 
+        public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter)
+        {
+            return GetFiltered(filter, new Expression<Func<TEntity, object>>[0]);
+        }
+
+        public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns)
+        {
+            return GetFiltered(filter, sortColumns, new Expression<Func<TEntity, object>>[0]);
+        }
+
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></returns>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></returns>
         public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, params string[] loadProperties)
         {
             if(filter == null)
@@ -547,7 +618,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="loadProperties"></param>
@@ -561,11 +632,11 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="sortColumns"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="loadProperties"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public IEnumerable<TEntity> GetFiltered(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns, params string[] loadProperties)
         {
@@ -581,7 +652,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="sortColumns"></param>
@@ -593,9 +664,9 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public int DeleteMany(Expression<Func<TEntity, bool>> filter)
         {
@@ -603,9 +674,9 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public int DeleteMany(ISpecification<TEntity> specification)
         {
@@ -613,10 +684,10 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateExpression)
         {
@@ -627,10 +698,10 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
         public int UpdateMany(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateExpression)
         {
@@ -638,10 +709,10 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         }
 
         /// <summary>
-        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
-        /// <param name="persisted"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
-        /// <param name="current"><see cref="eQuantic.Core.Data.Repository.IRepository{TEntity, TKey}"/></param>
+        /// <param name="persisted"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="current"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         public virtual void Merge(TEntity persisted, TEntity current)
         {
             _unitOfWork.ApplyCurrentValues(persisted, current);

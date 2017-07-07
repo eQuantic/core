@@ -7,7 +7,7 @@ namespace eQuantic.Core.Collections
     {
         int PageIndex { get; set; }
         int PageSize { get; set; }
-        int TotalCount { get; set; }
+        long TotalCount { get; set; }
     }
     public interface IPagedEnumerable<T> : IPagedEnumerable, IEnumerable<T>
     {

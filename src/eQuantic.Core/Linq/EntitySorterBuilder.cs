@@ -14,19 +14,19 @@ namespace eQuantic.Core.Linq
 
         public EntitySorterBuilder(string propertyName)
         {
-            List<MethodInfo> propertyAccessors = GetPropertyAccessors(propertyName);
+            //List<MethodInfo> propertyAccessors = GetPropertyAccessors(propertyName);
+            //this.keyType = propertyAccessors.Last().ReturnType;
 
-            this.keyType = propertyAccessors.Last().ReturnType;
-
-            ILambdaBuilder builder = CreateLambdaBuilder(keyType);
-
-            this.keySelector =
-                builder.BuildLambda(propertyAccessors);
+            List<PropertyInfo> properties = GetProperties(propertyName);
+            this.keyType = properties.Last().PropertyType;
+            var builder = CreateLambdaBuilder(keyType);
+            this.keySelector = builder.BuildLambda(properties);
         }
 
         private interface ILambdaBuilder
         {
             LambdaExpression BuildLambda(IEnumerable<MethodInfo> propertyAccessors);
+            LambdaExpression BuildLambda(IEnumerable<PropertyInfo> properties);
         }
 
         public SortDirection Direction { get; set; }
@@ -76,8 +76,42 @@ namespace eQuantic.Core.Linq
                     " could not be parsed. " + ex.Message;
 
                 // We throw a more expressive exception at this level.
-                throw new ArgumentException(message, "propertyName");
+                throw new ArgumentException(message, nameof(propertyName));
             }
+        }
+
+        private static List<PropertyInfo> GetProperties(string propertyName)
+        {
+            try
+            {
+                return GetPropertiesFromChain(propertyName);
+            }
+            catch (InvalidOperationException ex)
+            {
+                string message = propertyName +
+                    " could not be parsed. " + ex.Message;
+
+                // We throw a more expressive exception at this level.
+                throw new ArgumentException(message, nameof(propertyName));
+            }
+        }
+
+        private static List<PropertyInfo> GetPropertiesFromChain(string propertyNameChain)
+        {
+            var properties = new List<PropertyInfo>();
+
+            var declaringType = typeof(T);
+
+            foreach (string name in propertyNameChain.Split('.'))
+            {
+                var property = GetPropertyByName(declaringType, name);
+
+                properties.Add(property);
+
+                declaringType = property.PropertyType;
+            }
+
+            return properties;
         }
 
         private static List<MethodInfo> GetPropertyAccessorsFromChain(string propertyNameChain)
@@ -107,15 +141,9 @@ namespace eQuantic.Core.Linq
 
         private static PropertyInfo GetPropertyByName(Type declaringType, string propertyName)
         {
-
-#if NETSTANDARD1_3
-            var prop =
-                declaringType.GetTypeInfo()
-                    .DeclaredProperties.FirstOrDefault(p => p.Name.ToLower() == propertyName.ToLower() && p.CanRead);
-#else
             BindingFlags flags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
             var prop = declaringType.GetProperty(propertyName, flags);
-#endif
+
             if (prop == null)
             {
                 string exceptionMessage = string.Format(
@@ -147,17 +175,11 @@ namespace eQuantic.Core.Linq
 
         private sealed class LambdaBuilder<TKey> : ILambdaBuilder
         {
-            public LambdaExpression BuildLambda(
-                IEnumerable<MethodInfo> propertyAccessors)
+            public LambdaExpression BuildLambda(IEnumerable<MethodInfo> propertyAccessors)
             {
-                ParameterExpression parameterExpression =
-                    Expression.Parameter(typeof(T), "entity");
-
-                Expression propertyExpression = BuildPropertyExpression(
-                    propertyAccessors, parameterExpression);
-
-                return Expression.Lambda<Func<T, TKey>>(
-                    propertyExpression, new[] { parameterExpression });
+                var parameterExpression = Expression.Parameter(typeof(T), "entity");
+                var propertyExpression = BuildPropertyExpression(propertyAccessors, parameterExpression);
+                return Expression.Lambda<Func<T, TKey>>(propertyExpression, new[] { parameterExpression });
             }
 
             private static Expression BuildPropertyExpression(IEnumerable<MethodInfo> propertyAccessors,
@@ -167,14 +189,33 @@ namespace eQuantic.Core.Linq
 
                 foreach (var propertyAccessor in propertyAccessors)
                 {
-                    var innerExpression =
-                        propertyExpression ?? parameterExpression;
-
-                    propertyExpression = Expression.Property(
-                        innerExpression, propertyAccessor);
+                    var innerExpression = propertyExpression ?? parameterExpression;
+                    propertyExpression = Expression.Property(innerExpression, propertyAccessor);
                 }
 
                 return propertyExpression;
+            }
+
+            private static Expression BuildPropertyExpression(IEnumerable<PropertyInfo> properties,
+                ParameterExpression parameterExpression)
+            {
+                Expression propertyExpression = null;
+
+                foreach (var property in properties)
+                {
+                    var innerExpression = propertyExpression ?? parameterExpression;
+
+                    propertyExpression = Expression.Property(innerExpression, property);
+                }
+
+                return propertyExpression;
+            }
+
+            public LambdaExpression BuildLambda(IEnumerable<PropertyInfo> properties)
+            {
+                var parameterExpression = Expression.Parameter(typeof(T), "entity");
+                var propertyExpression = BuildPropertyExpression(properties, parameterExpression);
+                return Expression.Lambda<Func<T, TKey>>(propertyExpression, new[] { parameterExpression });
             }
         }
     }

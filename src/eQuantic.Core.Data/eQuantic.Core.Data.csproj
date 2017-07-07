@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>eQuantic Core Data Class Library</Description>
     <AssemblyTitle>eQuantic.Core.Data</AssemblyTitle>
-    <VersionPrefix>1.7.1</VersionPrefix>
+    <VersionPrefix>1.7.4</VersionPrefix>
     <Authors>eQuantic Systems</Authors>
     <TargetFrameworks>net45;net461;net462;netstandard1.3</TargetFrameworks>
     <AssemblyName>eQuantic.Core.Data</AssemblyName>
@@ -22,11 +22,13 @@
     <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
-    <Version>1.7.2</Version>
+    <Version>1.8.2</Version>
+    <AssemblyVersion>1.8.2.0</AssemblyVersion>
+    <FileVersion>1.8.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="eQuantic.Core" Version="1.4.5" />
+    <PackageReference Include="eQuantic.Core" Version="1.4.7" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
@@ -43,10 +45,6 @@
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
-  <Target Name="PostcompileScript" AfterTargets="Build" Condition=" '$(IsCrossTargetingBuild)' != 'true' ">
-    <Exec Command="dotnet pack --no-build --configuration Release --output ../../artifacts/pkg" />
-  </Target>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using eQuantic.Core.Data.Repository;
+using eQuantic.Core.Data.Repository.Sql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -54,6 +55,22 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             }
         }
 
+        public async Task<int> CommitAsync()
+        {
+            try
+            {
+                var i = await _context.SaveChangesAsync();
+
+                _transaction?.Commit();
+
+                return i;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public int CommitAndRefreshChanges()
         {
             int changes = 0;
@@ -74,6 +91,33 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
 
                     ex.Entries.ToList()
                               .ForEach(entry => entry.OriginalValues.SetValues(entry.GetDatabaseValues()));
+
+                }
+            } while (saveFailed);
+
+            return changes;
+        }
+
+        public async Task<int> CommitAndRefreshChangesAsync()
+        {
+            int changes = 0;
+            bool saveFailed = false;
+
+            do
+            {
+                try
+                {
+                    changes = await _context.SaveChangesAsync();
+
+                    saveFailed = false;
+
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    saveFailed = true;
+
+                    ex.Entries.ToList()
+                        .ForEach(entry => entry.OriginalValues.SetValues(entry.GetDatabaseValues()));
 
                 }
             } while (saveFailed);
@@ -114,6 +158,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             }
             return cmd;
         }
+
         private string GetQueryProcedure(string name, params object[] parameters)
         {
             return $"EXEC {name}{GetQueryParameters(parameters)}";
@@ -202,34 +247,52 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
                 _context.Entry<TEntity>(item).Collection(navigationProperty).Load();
         }
 
+        public async Task LoadCollectionAsync<TEntity, TElement>(TEntity item, Expression<Func<TEntity, IEnumerable<TElement>>> navigationProperty, Expression<Func<TElement, bool>> filter = null) where TEntity : class where TElement : class
+        {
+            if (filter != null)
+                await _context.Entry<TEntity>(item).Collection(navigationProperty).Query().Where(filter).LoadAsync();
+            else
+                await _context.Entry<TEntity>(item).Collection(navigationProperty).LoadAsync();
+        }
+
         public void LoadProperty<TEntity, TComplexProperty>(TEntity item, Expression<Func<TEntity, TComplexProperty>> selector) where TEntity : class where TComplexProperty : class
         {
-            //TODO Waiting for EntityFramework Core team update
-            //var entity = _context.Entry<TEntity>(item);
-            //_context.Entry(entity.ComplexProperty(selector).CurrentValue).Reload();
+            _context.Entry<TEntity>(item).Reference(selector).Load();
+        }
+
+        public async Task LoadPropertyAsync<TEntity, TComplexProperty>(TEntity item, Expression<Func<TEntity, TComplexProperty>> selector) where TEntity : class where TComplexProperty : class
+        {
+            await _context.Entry<TEntity>(item).Reference(selector).LoadAsync();
+        }
+
+        public void LoadProperty<TEntity>(TEntity item, string propertyName) where TEntity : class
+        {
+            _context.Entry<TEntity>(item).Reference(propertyName).Load();
+        }
+
+        public async Task LoadPropertyAsync<TEntity>(TEntity item, string propertyName) where TEntity : class
+        {
+            await _context.Entry<TEntity>(item).Reference(propertyName).LoadAsync();
         }
 
         public void UpdateDatabase()
         {
-            if (0 == System.Threading.Interlocked.Exchange(ref IsMigrating, 1))
+            if (0 == Interlocked.Exchange(ref IsMigrating, 1))
             {
                 try
                 {
-                    //TODO Run migrations
+                    _context.Database.Migrate();
                 }
                 finally
                 {
-                    System.Threading.Interlocked.Exchange(ref IsMigrating, 0);
+                    Interlocked.Exchange(ref IsMigrating, 0);
                 }
             }
         }
 
         public IEnumerable<string> GetPendingMigrations()
         {
-            //TODO List pending migrations
-            //var dbMigrator = GetMigrator();
-            //return dbMigrator.GetPendingMigrations();
-            return null;
+            return _context.Database.GetPendingMigrations();
         }
     }
 }

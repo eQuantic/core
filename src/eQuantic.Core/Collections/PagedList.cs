@@ -4,9 +4,9 @@ namespace eQuantic.Core.Collections
 {
     public class PagedList<T> : List<T>, IPagedEnumerable<T>
     {
-        public PagedList(IEnumerable<T> collection, int total) : base(collection)
+        public PagedList(IEnumerable<T> collection, long total) : base(collection)
         {
-            PageSize = total;
+            PageSize = (int)total;
             TotalCount = total;
         }
 
@@ -32,6 +32,6 @@ namespace eQuantic.Core.Collections
         /// <value>
         /// Total number of objects contained within the superset.
         /// </value>
-        public int TotalCount { get; set; }
+        public long TotalCount { get; set; }
     }
 }

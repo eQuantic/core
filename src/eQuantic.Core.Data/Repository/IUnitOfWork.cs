@@ -12,8 +12,7 @@ namespace eQuantic.Core.Data.Repository
     /// comply the PI (Persistence Ignorant) principle in our Domain, we implement this interface/contract. 
     /// This interface/contract should be complied by any UoW implementation to be used with this Domain.
     /// </summary>
-    public interface IUnitOfWork
-        : IDisposable
+    public interface IUnitOfWork : IDisposable
     {
         /// <summary>
         /// 
@@ -30,11 +29,7 @@ namespace eQuantic.Core.Data.Repository
         /// <returns></returns>
         TRepository GetRepository<TRepository>(string name) where TRepository : IRepository;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        void BeginTransaction();
-
+        
         /// <summary>
         /// Commit all changes made in a container.
         /// </summary>
@@ -45,6 +40,15 @@ namespace eQuantic.Core.Data.Repository
         int Commit();
 
         /// <summary>
+        /// Commit all changes made in a container.
+        /// </summary>
+        ///<remarks>
+        /// If the entity have fixed properties and any optimistic concurrency problem exists,  
+        /// then an exception is thrown
+        ///</remarks>
+        Task<int> CommitAsync();
+
+        /// <summary>
         /// Commit all changes made in  a container.
         /// </summary>
         ///<remarks>
@@ -53,44 +57,18 @@ namespace eQuantic.Core.Data.Repository
         ///</remarks>
         int CommitAndRefreshChanges();
 
+        /// <summary>
+        /// Commit all changes made in  a container.
+        /// </summary>
+        ///<remarks>
+        /// If the entity have fixed properties and any optimistic concurrency problem exists,
+        /// then 'client changes' are refreshed - Client wins
+        ///</remarks>
+        Task<int> CommitAndRefreshChangesAsync();
 
         /// <summary>
         /// Rollback tracked changes. See references of UnitOfWork pattern
         /// </summary>
         void RollbackChanges();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        int ExecuteProcedure(string name, params object[] parameters);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        Task<int> ExecuteProcedureAsync(string name, params object[] parameters);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        TResult ExecuteFunction<TResult>(string name, params object[] parameters) where TResult : class;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="name"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        Task<TResult> ExecuteFunctionAsync<TResult>(string name, params object[] parameters) where TResult : class;
     }
 }

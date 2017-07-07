@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace eQuantic.Core.Data.Repository
+namespace eQuantic.Core.Data.Repository.Sql
 {
     /// <summary>
     /// Base contract for support 'dialect specific queries'.
@@ -44,5 +44,44 @@ namespace eQuantic.Core.Data.Repository
         /// <param name="parameters">A vector of parameters values</param>
         /// <returns>The number of affected records</returns>
         Task<int> ExecuteCommandAsync(string sqlCommand, params object[] parameters);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void BeginTransaction();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        int ExecuteProcedure(string name, params object[] parameters);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task<int> ExecuteProcedureAsync(string name, params object[] parameters);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        TResult ExecuteFunction<TResult>(string name, params object[] parameters) where TResult : class;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        Task<TResult> ExecuteFunctionAsync<TResult>(string name, params object[] parameters) where TResult : class;
     }
 }

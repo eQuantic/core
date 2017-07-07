@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
-namespace eQuantic.Core.Data.Repository
+namespace eQuantic.Core.Data.Repository.Sql
 {
     /// <summary>
     /// The UnitOfWork contract for EF implementation
@@ -64,9 +65,57 @@ namespace eQuantic.Core.Data.Repository
             where TEntity : class
             where TElement : class;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TElement"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="navigationProperty"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        Task LoadCollectionAsync<TEntity, TElement>(TEntity item,
+            Expression<Func<TEntity, IEnumerable<TElement>>> navigationProperty,
+            Expression<Func<TElement, bool>> filter = null) where TEntity : class where TElement : class;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TComplexProperty"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="selector"></param>
         void LoadProperty<TEntity, TComplexProperty>(TEntity item, Expression<Func<TEntity, TComplexProperty>> selector)
             where TEntity : class
             where TComplexProperty : class;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TComplexProperty"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        Task LoadPropertyAsync<TEntity, TComplexProperty>(TEntity item,
+            Expression<Func<TEntity, TComplexProperty>> selector) where TEntity : class where TComplexProperty : class;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="propertyName"></param>
+        void LoadProperty<TEntity>(TEntity item, string propertyName) where TEntity : class;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="item"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        Task LoadPropertyAsync<TEntity>(TEntity item, string propertyName) where TEntity : class;
 
         /// <summary>
         /// 
