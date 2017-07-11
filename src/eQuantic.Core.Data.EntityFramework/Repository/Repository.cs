@@ -182,6 +182,8 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
 
         protected void LoadCascade(string[]props, object obj, int index = 0)
         {
+            if (obj == null) return;
+
 #if NETSTANDARD1_3
             var prop = obj.GetType().GetTypeInfo().GetDeclaredProperty(props[index]);
 #else

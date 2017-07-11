@@ -20,7 +20,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
     <Copyright>Copyright ©  2016</Copyright>
-    <Version>1.5.1</Version>
+    <Version>1.5.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
