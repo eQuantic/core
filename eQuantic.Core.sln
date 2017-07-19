@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0CA2F610-6D57-4D1F-92E3-EDCCEDAD8297}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F72DED29-7BF7-4870-81B4-7AFE91270530}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet.Config = NuGet.Config
+		README.md = README.md
+		Repository.md = Repository.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core", "src\eQuantic.Core\eQuantic.Core.csproj", "{E6F4238E-42A3-4A46-B03D-781A76AC919C}"
@@ -20,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core.Data.EntityFr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core.Data.MongoDb", "src\eQuantic.Core.Data.MongoDb\eQuantic.Core.Data.MongoDb.csproj", "{397E9F46-526D-4F0C-B167-754F91676C8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eQuantic.Core.Web.Examples", "src\eQuantic.Core.Web.Examples\eQuantic.Core.Web.Examples.csproj", "{FB525BD7-1CD7-4F03-B74B-242A8ED880BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core.Web.Examples", "src\eQuantic.Core.Web.Examples\eQuantic.Core.Web.Examples.csproj", "{FB525BD7-1CD7-4F03-B74B-242A8ED880BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,6 +4,7 @@ using AutoMapper;
 using eQuantic.Core.Collections;
 using eQuantic.Core.Linq;
 using eQuantic.Core.Web.Examples.Domain.Entities;
+using eQuantic.Core.Web.Examples.Domain.Services.Contracts;
 using eQuantic.Core.Web.Examples.Domain.Specification;
 using eQuantic.Core.Web.Examples.Infrastructure;
 using eQuantic.Core.Web.Examples.Infrastructure.Data;
@@ -11,7 +12,7 @@ using eQuantic.Core.Web.Examples.Infrastructure.Repositories.Contracts;
 
 namespace eQuantic.Core.Web.Examples.Domain.Services
 {
-    public class PersonService
+    public class PersonService : IPersonService
     {
         public IMapper Mapper { get; }
         public ExampleUnitOfWork UnitOfWork { get; }
