@@ -10,7 +10,7 @@
     <PackageId>eQuantic.Core.Data</PackageId>
     <PackageTags>eQuantic;Core;Data;Library;Repository;Pattern</PackageTags>
     <PackageReleaseNotes>Entity ignorant persistance with Repository Pattern</PackageReleaseNotes>
-    <PackageProjectUrl>http://www.equantic.com.br</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/eQuantic/core</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -21,13 +21,14 @@
     <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
-    <Version>1.8.2</Version>
-    <AssemblyVersion>1.8.2.0</AssemblyVersion>
-    <FileVersion>1.8.2.0</FileVersion>
+    <Version>1.8.2.1</Version>
+    <AssemblyVersion>1.8.2.1</AssemblyVersion>
+    <FileVersion>1.8.2.1</FileVersion>
+    <PackageIconUrl>https://raw.githubusercontent.com/eQuantic/core/master/src/eQuantic.Core.Data/Icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="eQuantic.Core" Version="1.4.7" />
+    <PackageReference Include="eQuantic.Core" Version="1.4.7.1" />
   </ItemGroup>
 
   <ItemGroup>

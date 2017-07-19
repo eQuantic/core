@@ -11,7 +11,7 @@
     <PackageId>eQuantic.Core</PackageId>
     <PackageTags>eQuantic;Core;Library</PackageTags>
     <PackageReleaseNotes>Customed solutions for log, security, dependency injections, ...</PackageReleaseNotes>
-    <PackageProjectUrl>http://www.equantic.com.br</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/eQuantic/core</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -22,9 +22,10 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <Version>1.4.7</Version>
-    <AssemblyVersion>1.4.7</AssemblyVersion>
-    <FileVersion>1.4.7</FileVersion>
+    <Version>1.4.7.1</Version>
+    <AssemblyVersion>1.4.7.1</AssemblyVersion>
+    <FileVersion>1.4.7.1</FileVersion>
+    <PackageIconUrl>https://raw.githubusercontent.com/eQuantic/core/master/src/eQuantic.Core/Icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
