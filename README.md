@@ -6,9 +6,9 @@
 
 The **eQuantic Core** composed of several solutions of implementations based on design patterns.
 
-  * Specification Patter
-  * Strategy Patter
-  * Dependency Injection Patter
+  * Specification Pattern
+  * Strategy Pattern
+  * Dependency Injection Pattern
 
 To install **eQuantic.Core**, run the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console)
 ```dos
