@@ -9,7 +9,6 @@
     <PackageId>eQuantic.Core.Web</PackageId>
     <PackageTags>eQuantic;Core;Library</PackageTags>
     <PackageReleaseNotes>Customed solutions for web projects ...</PackageReleaseNotes>
-    <PackageIconUrl>http://www.equantic.com.br/favicon.ico</PackageIconUrl>
     <PackageProjectUrl>http://www.equantic.com.br</PackageProjectUrl>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -26,6 +25,13 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Icon.png" Pack="true" PackagePath="Icon.png" />
+    <None Include="Icon_details.png" Pack="true" PackagePath="Icon_details.png" />
+    <None Include="Icon_dialog.png" Pack="true" PackagePath="Icon_dialog.png" />
+    <None Include="Icon_list.png" Pack="true" PackagePath="Icon_list.png" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">

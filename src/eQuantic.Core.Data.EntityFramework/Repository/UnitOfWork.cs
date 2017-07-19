@@ -23,7 +23,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             _context = context;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             _transaction?.Dispose();
             _context?.Dispose();

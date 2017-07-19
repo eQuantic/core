@@ -10,7 +10,6 @@
     <PackageId>eQuantic.Core.Data</PackageId>
     <PackageTags>eQuantic;Core;Data;Library;Repository;Pattern</PackageTags>
     <PackageReleaseNotes>Entity ignorant persistance with Repository Pattern</PackageReleaseNotes>
-    <PackageIconUrl>http://www.equantic.com.br/favicon.ico</PackageIconUrl>
     <PackageProjectUrl>http://www.equantic.com.br</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -31,6 +30,13 @@
     <PackageReference Include="eQuantic.Core" Version="1.4.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Icon.png" Pack="true" PackagePath="Icon.png" />
+    <None Include="Icon_details.png" Pack="true" PackagePath="Icon_details.png" />
+    <None Include="Icon_dialog.png" Pack="true" PackagePath="Icon_dialog.png" />
+    <None Include="Icon_list.png" Pack="true" PackagePath="Icon_list.png" />
+  </ItemGroup>
+  
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
