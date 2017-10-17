@@ -146,7 +146,7 @@ namespace eQuantic.Core.Extensions
                 throw new ArgumentException("Lambda is not a Property");
             }
             var type = (member.Expression as ParameterExpression)?.Type;
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
             return type.GetTypeInfo().GetDeclaredProperty(member.Member.Name);
 #else
             return

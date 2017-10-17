@@ -4,9 +4,9 @@
     <Description>eQuantic Core Library</Description>
     <Copyright>2017</Copyright>
     <AssemblyTitle>eQuantic.Core</AssemblyTitle>
-    <VersionPrefix>1.4.7</VersionPrefix>
+    <VersionPrefix>1.4.9</VersionPrefix>
     <Authors>eQuantic Systems</Authors>
-    <TargetFrameworks>net45;net461;net462;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net45;net461;net462;netstandard1.6</TargetFrameworks>
     <AssemblyName>eQuantic.Core</AssemblyName>
     <PackageId>eQuantic.Core</PackageId>
     <PackageTags>eQuantic;Core;Library</PackageTags>
@@ -22,9 +22,8 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <Version>1.4.7.1</Version>
-    <AssemblyVersion>1.4.7.1</AssemblyVersion>
-    <FileVersion>1.4.7.1</FileVersion>
+    <AssemblyVersion>1.4.9.0</AssemblyVersion>
+    <FileVersion>1.4.9.0</FileVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/eQuantic/core/master/src/eQuantic.Core/Icon.png</PackageIconUrl>
   </PropertyGroup>
 
@@ -57,7 +56,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />

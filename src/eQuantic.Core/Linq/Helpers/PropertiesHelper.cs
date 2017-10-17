@@ -61,7 +61,7 @@ namespace eQuantic.Core.Linq.Helpers
             var sequence = new List<PropertyInfo>();
             foreach (string properyName in properies)
             {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
                 pi = type.GetTypeInfo().GetDeclaredProperty(properyName);
 #else
                 pi = type.GetProperty(properyName);

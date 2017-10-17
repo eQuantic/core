@@ -5,7 +5,7 @@ namespace eQuantic.Core.Extensions
 {
     public static class TextInfoExtensions
     {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
         public static string ToTitleCase(this TextInfo textInfo, string str)
         {
             var tokens = str.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);

@@ -19,7 +19,7 @@ namespace eQuantic.Core.Extensions
 
                 try
                 {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
                     types = assembly.ExportedTypes.ToArray();
 #else
                     types = assembly.GetTypes();
@@ -56,7 +56,7 @@ namespace eQuantic.Core.Extensions
 
                 try
                 {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
                     types = assembly.ExportedTypes.ToArray();
 #else
                     types = assembly.GetTypes();
@@ -83,7 +83,7 @@ namespace eQuantic.Core.Extensions
             }
         }
 
-#if !NETSTANDARD1_3
+#if !NETSTANDARD1_6
         public static IEnumerable<KeyValuePair<Type, IEnumerable<T>>> AllTypesWithAttribute<T>(this AppDomain domain, bool inherit = true)
         {
             return AllTypesWithAttribute<T>(domain.GetAssemblies(), inherit);
@@ -123,7 +123,7 @@ namespace eQuantic.Core.Extensions
         internal static IEnumerable<PropertyInfo> GetPublicAccessibleProperties(this Type type)
         {
             
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
             var properties = type.GetTypeInfo().DeclaredProperties;
 #else
             var properties = type.GetProperties();
@@ -135,7 +135,7 @@ namespace eQuantic.Core.Extensions
                 yield return propertyInfo;
             }
         }
-#if !NETSTANDARD1_3
+#if !NETSTANDARD1_6
         internal static bool IsCustomNonEnumerableType(this Type type)
         {
             var nullType = Nullable.GetUnderlyingType(type);

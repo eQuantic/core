@@ -10,7 +10,7 @@ namespace eQuantic.Core.Extensions
     {
         public static string GetDescription(this Enum value)
         {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
             FieldInfo field = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
 #else
             FieldInfo field = value.GetType().GetField(value.ToString());

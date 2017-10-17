@@ -12,12 +12,13 @@ using eQuantic.Core.Linq;
 using eQuantic.Core.Linq.Extensions;
 using eQuantic.Core.Linq.Specification;
 using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.Lolita;
 
 namespace eQuantic.Core.Data.EntityFramework.Repository
 {
     public class AsyncRepository<TUnitOfWork, TEntity, TKey> : Repository<TUnitOfWork, TEntity, TKey>, IAsyncRepository<TUnitOfWork, TEntity, TKey>
         where TUnitOfWork : IQueryableUnitOfWork
-        where TEntity : class, IEntity
+        where TEntity : class, IEntity, new()
     {
         public AsyncRepository(TUnitOfWork unitOfWork) : base(unitOfWork)
         {
@@ -43,26 +44,29 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             if (id != null)
             {
                 var item = await GetSet().FindAsync(id);
-                if (loadProperties != null && loadProperties.Length > 0)
+                if (item != null)
                 {
-                    foreach (var property in loadProperties)
+                    if (loadProperties != null && loadProperties.Length > 0)
                     {
-                        if (!string.IsNullOrEmpty(property))
+                        foreach (var property in loadProperties)
                         {
-                            var props = property.Split('.');
-                            if (props.Length == 1)
+                            if (!string.IsNullOrEmpty(property))
                             {
-                                await UnitOfWork.LoadPropertyAsync(item, property);
+                                var props = property.Split('.');
+                                if (props.Length == 1)
+                                {
+                                    await UnitOfWork.LoadPropertyAsync(item, property);
+                                }
+                                else
+                                {
+                                    await LoadCascadeAsync(props, item);
+                                }
+
                             }
-                            else
-                            {
-                                await LoadCascadeAsync(props, item);
-                            }
-                            
                         }
                     }
+                    if (force) UnitOfWork.Reload(item);
                 }
-                if (force) UnitOfWork.Reload(item);
                 return item;
             }
             else
@@ -71,7 +75,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
 
         protected async Task LoadCascadeAsync(string[] props, object obj, int index = 0)
         {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6 || NETSTANDARD2_0
             var prop = obj.GetType().GetTypeInfo().GetDeclaredProperty(props[index]);
 #else
             var prop = obj.GetType().GetProperty(props[index]);
@@ -348,6 +352,57 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         public async Task<IEnumerable<TEntity>> GetFilteredAsync(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns, params Expression<Func<TEntity, object>>[] loadProperties)
         {
             return await GetFilteredAsync(filter, sortColumns, GetPropertyNames(loadProperties));
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public async Task<int> DeleteManyAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await GetSet().Where(filter).DeleteAsync();
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public async Task<int> DeleteManyAsync(ISpecification<TEntity> specification)
+        {
+            return await DeleteManyAsync(specification.SatisfiedBy());
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public async Task<int> UpdateManyAsync(Expression<Func<TEntity, bool>> filter, params UpdateField<TEntity>[] values)
+        {
+            if (values == null || values.Length == 0)
+                throw new ArgumentException("Expression cannot be null or empty", nameof(values));
+
+            var query = GetSet().Where(filter);
+            var settings = values.Aggregate<UpdateField<TEntity>, LolitaSetting<TEntity>>(null,
+                (current, updateField) =>
+                    current == null
+                        ? query.SetField(updateField.Column).WithValue(updateField.Value)
+                        : current.SetField(updateField.Column).WithValue(updateField.Value));
+            return await settings.UpdateAsync();
+        }
+
+        /// <summary>
+        /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
+        /// </summary>
+        /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <returns></returns>
+        public async Task<int> UpdateManyAsync(ISpecification<TEntity> specification, params UpdateField<TEntity>[] values)
+        {
+            return await UpdateManyAsync(specification.SatisfiedBy(), values);
         }
     }
 }

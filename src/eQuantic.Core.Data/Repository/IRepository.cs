@@ -32,7 +32,7 @@ namespace eQuantic.Core.Data.Repository
     /// <typeparam name="TKey">Type of primary key for this entity</typeparam>
     public interface IRepository<TUnitOfWork, TEntity, TKey> : IRepository<TUnitOfWork>
         where TUnitOfWork : IUnitOfWork
-        where TEntity : class, IEntity
+        where TEntity : class, IEntity, new()
     {
         
         /// <summary>
@@ -524,16 +524,16 @@ namespace eQuantic.Core.Data.Repository
         /// Update filtered elements of type TEntity in repository
         /// </summary>
         /// <param name="filter"></param>
-        /// <param name="updateExpression"></param>
+        /// <param name="values"></param>
         /// <returns></returns>
-        int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateExpression);
+        int UpdateMany(Expression<Func<TEntity, bool>> filter, params UpdateField<TEntity>[] values);
 
         /// <summary>
         /// Update specified elements of type TEntity in repository
         /// </summary>
         /// <param name="specification"></param>
-        /// <param name="updateExpression"></param>
+        /// <param name="values"></param>
         /// <returns></returns>
-        int UpdateMany(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateExpression);
+        int UpdateMany(ISpecification<TEntity> specification, params UpdateField<TEntity>[] values);
     }
 }

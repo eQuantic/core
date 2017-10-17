@@ -9,7 +9,7 @@ namespace eQuantic.Core.Data.Repository
 {
     public interface IAsyncRepository<TUnitOfWork, TEntity, TKey> : IRepository<TUnitOfWork, TEntity, TKey>
         where TUnitOfWork : IUnitOfWork
-        where TEntity : class, IEntity
+        where TEntity : class, IEntity, new()
     {
         /// <summary>
         /// Get element by entity key
@@ -447,5 +447,35 @@ namespace eQuantic.Core.Data.Repository
         /// <returns></returns>
         Task<IEnumerable<TEntity>> GetFilteredAsync(Expression<Func<TEntity, bool>> filter, ISorting[] sortColumns,
             params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
+        /// Delete filtered elements of type TEntity in repository
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        Task<int> DeleteManyAsync(Expression<Func<TEntity, bool>> filter);
+
+        /// <summary>
+        /// Delete specified elements of type TEntity in repository
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <returns></returns>
+        Task<int> DeleteManyAsync(ISpecification<TEntity> specification);
+
+        /// <summary>
+        /// Update filtered elements of type TEntity in repository
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        Task<int> UpdateManyAsync(Expression<Func<TEntity, bool>> filter, params UpdateField<TEntity>[] values);
+
+        /// <summary>
+        /// Update specified elements of type TEntity in repository
+        /// </summary>
+        /// <param name="specification"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        Task<int> UpdateManyAsync(ISpecification<TEntity> specification, params UpdateField<TEntity>[] values);
     }
 }

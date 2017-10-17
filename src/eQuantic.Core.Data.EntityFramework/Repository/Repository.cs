@@ -11,8 +11,9 @@ using eQuantic.Core.Linq.Extensions;
 using eQuantic.Core.Linq.Helpers;
 using eQuantic.Core.Linq.Specification;
 using Microsoft.EntityFrameworkCore;
-using Z.EntityFramework.Plus;
-
+using Pomelo.EntityFrameworkCore.Lolita;
+using Pomelo.EntityFrameworkCore.Lolita.Delete;
+using Pomelo.EntityFrameworkCore.Lolita.Update;
 namespace eQuantic.Core.Data.EntityFramework.Repository
 {
     /// <summary>
@@ -22,7 +23,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
     /// <typeparam name="TKey"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></typeparam>
     public class Repository<TUnitOfWork, TEntity, TKey> : IRepository<TUnitOfWork, TEntity, TKey>
         where TUnitOfWork : IQueryableUnitOfWork
-        where TEntity : class, IEntity
+        where TEntity : class, IEntity, new()
     {
 
         #region Members
@@ -154,26 +155,29 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
             if (id != null)
             {
                 var item = GetSet().Find(id);
-                if (loadProperties != null && loadProperties.Length > 0)
+                if (item != null)
                 {
-                    foreach (var property in loadProperties)
+                    if (loadProperties != null && loadProperties.Length > 0)
                     {
-                        if (!string.IsNullOrEmpty(property))
+                        foreach (var property in loadProperties)
                         {
-                            var props = property.Split('.');
+                            if (!string.IsNullOrEmpty(property))
+                            {
+                                var props = property.Split('.');
 
-                            if (props.Length == 1)
-                            {
-                                _unitOfWork.LoadProperty(item, property);
-                            }
-                            else
-                            {
-                                LoadCascade(props, item);
+                                if (props.Length == 1)
+                                {
+                                    _unitOfWork.LoadProperty(item, property);
+                                }
+                                else
+                                {
+                                    LoadCascade(props, item);
+                                }
                             }
                         }
                     }
+                    if (force) _unitOfWork.Reload(item);
                 }
-                if (force) _unitOfWork.Reload(item);
                 return item;
             }
             else
@@ -184,7 +188,7 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         {
             if (obj == null) return;
 
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6 || NETSTANDARD2_0
             var prop = obj.GetType().GetTypeInfo().GetDeclaredProperty(props[index]);
 #else
             var prop = obj.GetType().GetProperty(props[index]);
@@ -689,25 +693,31 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
-        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateExpression)
+        public int UpdateMany(Expression<Func<TEntity, bool>> filter, params UpdateField<TEntity>[] values)
         {
-            if(updateExpression == null)
-                throw new ArgumentException("Expression cannot be null", nameof(updateExpression));
+            if(values == null || values.Length == 0)
+                throw new ArgumentException("Expression cannot be null or empty", nameof(values));
 
-            return GetSet().Where(filter).Update(updateExpression);
+            var query = GetSet().Where(filter);
+            var settings = values.Aggregate<UpdateField<TEntity>, LolitaSetting<TEntity>>(null,
+                (current, updateField) =>
+                    current == null
+                        ? query.SetField(updateField.Column).WithValue(updateField.Value)
+                        : current.SetField(updateField.Column).WithValue(updateField.Value));
+            return settings.Update();
         }
 
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
-        /// <param name="updateExpression"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public int UpdateMany(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateExpression)
+        public int UpdateMany(ISpecification<TEntity> specification, params UpdateField<TEntity>[] values)
         {
-            return UpdateMany(specification.SatisfiedBy(), updateExpression);
+            return UpdateMany(specification.SatisfiedBy(), values);
         }
 
         /// <summary>

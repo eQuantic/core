@@ -143,7 +143,7 @@ namespace eQuantic.Core.Extensions
         {
             return String.Concat(Enumerable.Repeat(src, multiplier));
         }
-#if !NETSTANDARD1_3
+#if !NETSTANDARD1_6
         public static string RemoveDiacritics(this string text)
         {
             return string.Concat(
@@ -166,13 +166,13 @@ namespace eQuantic.Core.Extensions
                 src = src.Replace(chars[i].ToString(), replacements[i].ToString()).Trim();
             return src;
         }
-#if !NETSTANDARD1_3
+#if !NETSTANDARD1_6
         public static string CapitalizeName(this string name)
         {
             return CapitalizeName(name, Thread.CurrentThread.CurrentCulture);
         }
 #endif
-#if NETSTANDARD1_3
+#if NETSTANDARD1_6
         public static string CapitalizeName(this string name)
         {
             return CapitalizeName(name, null);

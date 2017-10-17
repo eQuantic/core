@@ -3,9 +3,9 @@
   <PropertyGroup>
     <Description>eQuantic Core Data Class Library</Description>
     <AssemblyTitle>eQuantic.Core.Data</AssemblyTitle>
-    <VersionPrefix>1.7.4</VersionPrefix>
+    <VersionPrefix>1.9.0.0</VersionPrefix>
     <Authors>eQuantic Systems</Authors>
-    <TargetFrameworks>net45;net461;net462;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net45;net461;net462;netstandard1.6</TargetFrameworks>
     <AssemblyName>eQuantic.Core.Data</AssemblyName>
     <PackageId>eQuantic.Core.Data</PackageId>
     <PackageTags>eQuantic;Core;Data;Library;Repository;Pattern</PackageTags>
@@ -21,14 +21,13 @@
     <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
-    <Version>1.8.2.1</Version>
-    <AssemblyVersion>1.8.2.1</AssemblyVersion>
-    <FileVersion>1.8.2.1</FileVersion>
+    <AssemblyVersion>1.9.0.0</AssemblyVersion>
+    <FileVersion>1.9.0.0</FileVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/eQuantic/core/master/src/eQuantic.Core.Data/Icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="eQuantic.Core" Version="1.4.7.1" />
+    <PackageReference Include="eQuantic.Core" Version="1.4.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,7 +52,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Linq" Version="4.3.0" />
