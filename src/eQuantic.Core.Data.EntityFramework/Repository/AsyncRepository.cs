@@ -12,7 +12,7 @@ using eQuantic.Core.Linq;
 using eQuantic.Core.Linq.Extensions;
 using eQuantic.Core.Linq.Specification;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.Lolita;
+using Z.EntityFramework.Plus;
 
 namespace eQuantic.Core.Data.EntityFramework.Repository
 {
@@ -378,31 +378,22 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
-        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="updateFactory"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public async Task<int> UpdateManyAsync(Expression<Func<TEntity, bool>> filter, params UpdateField<TEntity>[] values)
+        public async Task<int> UpdateManyAsync(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateFactory)
         {
-            if (values == null || values.Length == 0)
-                throw new ArgumentException("Expression cannot be null or empty", nameof(values));
-
-            var query = GetSet().Where(filter);
-            var settings = values.Aggregate<UpdateField<TEntity>, LolitaSetting<TEntity>>(null,
-                (current, updateField) =>
-                    current == null
-                        ? query.SetField(updateField.Column).WithValue(updateField.Value)
-                        : current.SetField(updateField.Column).WithValue(updateField.Value));
-            return await settings.UpdateAsync();
+            return await GetSet().Where(filter).UpdateAsync(updateFactory);
         }
 
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
-        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="updateFactory"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public async Task<int> UpdateManyAsync(ISpecification<TEntity> specification, params UpdateField<TEntity>[] values)
+        public async Task<int> UpdateManyAsync(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateFactory)
         {
-            return await UpdateManyAsync(specification.SatisfiedBy(), values);
+            return await UpdateManyAsync(specification.SatisfiedBy(), updateFactory);
         }
     }
 }

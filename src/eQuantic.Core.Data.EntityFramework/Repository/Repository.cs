@@ -11,9 +11,8 @@ using eQuantic.Core.Linq.Extensions;
 using eQuantic.Core.Linq.Helpers;
 using eQuantic.Core.Linq.Specification;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.Lolita;
-using Pomelo.EntityFrameworkCore.Lolita.Delete;
-using Pomelo.EntityFrameworkCore.Lolita.Update;
+using Z.EntityFramework.Plus;
+
 namespace eQuantic.Core.Data.EntityFramework.Repository
 {
     /// <summary>
@@ -693,31 +692,22 @@ namespace eQuantic.Core.Data.EntityFramework.Repository
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="filter"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
-        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="updateFactory"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public int UpdateMany(Expression<Func<TEntity, bool>> filter, params UpdateField<TEntity>[] values)
+        public int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateFactory)
         {
-            if(values == null || values.Length == 0)
-                throw new ArgumentException("Expression cannot be null or empty", nameof(values));
-
-            var query = GetSet().Where(filter);
-            var settings = values.Aggregate<UpdateField<TEntity>, LolitaSetting<TEntity>>(null,
-                (current, updateField) =>
-                    current == null
-                        ? query.SetField(updateField.Column).WithValue(updateField.Value)
-                        : current.SetField(updateField.Column).WithValue(updateField.Value));
-            return settings.Update();
+            return GetSet().Where(filter).Update(updateFactory);
         }
 
         /// <summary>
         /// <see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/>
         /// </summary>
         /// <param name="specification"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
-        /// <param name="values"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
+        /// <param name="updateFactory"><see cref="eQuantic.Core.Data.Repository.IRepository{TUnitOfWork, TEntity, TKey}"/></param>
         /// <returns></returns>
-        public int UpdateMany(ISpecification<TEntity> specification, params UpdateField<TEntity>[] values)
+        public int UpdateMany(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateFactory)
         {
-            return UpdateMany(specification.SatisfiedBy(), values);
+            return UpdateMany(specification.SatisfiedBy(), updateFactory);
         }
 
         /// <summary>
