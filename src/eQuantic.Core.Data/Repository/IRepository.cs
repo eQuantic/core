@@ -524,16 +524,16 @@ namespace eQuantic.Core.Data.Repository
         /// Update filtered elements of type TEntity in repository
         /// </summary>
         /// <param name="filter"></param>
-        /// <param name="values"></param>
+        /// <param name="updateFactory"></param>
         /// <returns></returns>
-        int UpdateMany(Expression<Func<TEntity, bool>> filter, params UpdateField<TEntity>[] values);
+        int UpdateMany(Expression<Func<TEntity, bool>> filter, Expression<Func<TEntity, TEntity>> updateFactory);
 
         /// <summary>
         /// Update specified elements of type TEntity in repository
         /// </summary>
         /// <param name="specification"></param>
-        /// <param name="values"></param>
+        /// <param name="updateFactory"></param>
         /// <returns></returns>
-        int UpdateMany(ISpecification<TEntity> specification, params UpdateField<TEntity>[] values);
+        int UpdateMany(ISpecification<TEntity> specification, Expression<Func<TEntity, TEntity>> updateFactory);
     }
 }
