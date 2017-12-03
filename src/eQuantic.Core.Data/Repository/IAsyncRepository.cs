@@ -85,6 +85,27 @@ namespace eQuantic.Core.Data.Repository
             params Expression<Func<TEntity, object>>[] loadProperties);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortingColumns"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> filter, ISorting[] sortingColumns, 
+            params string[] loadProperties);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortingColumns"></param>
+        /// <param name="Expression<Func<TEntity"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> filter, ISorting[] sortingColumns, 
+            params Expression<Func<TEntity, object>>[] loadProperties);
+
+        /// <summary>
         /// Get first element by criteria
         /// </summary>
         /// <param name="filter"></param>
@@ -116,6 +137,16 @@ namespace eQuantic.Core.Data.Repository
         /// <param name="loadProperties"></param>
         /// <returns></returns>
         Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> filter, ISorting[] sortingColumns, params string[] loadProperties);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="sortingColumns"></param>
+        /// <param name="Expression<Func<TEntity"></param>
+        /// <param name="loadProperties"></param>
+        /// <returns></returns>
+        Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> filter, ISorting[] sortingColumns, params Expression<Func<TEntity, object>>[] loadProperties);
 
         /// <summary>
         /// Get all elements of type TEntity in repository
