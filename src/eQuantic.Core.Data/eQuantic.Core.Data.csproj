@@ -1,16 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>eQuantic Core Data Class Library</Description>
     <AssemblyTitle>eQuantic.Core.Data</AssemblyTitle>
-    <Version>1.9.1.0</Version>
+    <Version>1.9.1.1</Version>
     <Authors>eQuantic Systems</Authors>
-    <TargetFrameworks>net45;net461;net462;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net45;net461;net462;netstandard1.6;netstandard2.0</TargetFrameworks>
     <AssemblyName>eQuantic.Core.Data</AssemblyName>
     <PackageId>eQuantic.Core.Data</PackageId>
     <PackageTags>eQuantic;Core;Data;Library;Repository;Pattern</PackageTags>
     <PackageReleaseNotes>Entity ignorant persistance with Repository Pattern</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/eQuantic/core</PackageProjectUrl>
+    <PackageOutputPath>../../artifacts/</PackageOutputPath>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -62,4 +64,12 @@
     <PackageReference Include="System.Threading" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Threading" Version="4.3.0" />
+  </ItemGroup>
 </Project>

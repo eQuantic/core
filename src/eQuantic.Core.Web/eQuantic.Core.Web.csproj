@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.0</Version>
+    <Version>1.0.0.1</Version>
     <Description>eQuantic Core Web Library</Description>
     <Copyright>Copyright 2016</Copyright>
     <Authors>eQuantic Systems</Authors>
@@ -11,6 +12,7 @@
     <PackageTags>eQuantic;Core;Library</PackageTags>
     <PackageReleaseNotes>Customed solutions for web projects ...</PackageReleaseNotes>
     <PackageProjectUrl>http://www.equantic.com.br</PackageProjectUrl>
+    <PackageOutputPath>../../artifacts/</PackageOutputPath>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

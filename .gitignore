@@ -283,5 +283,6 @@ build/
 
 # End of https://www.gitignore.io/api/visualstudio
 
+!artifacts/readme.txt
 !build/*.targets
 !build/*.props
