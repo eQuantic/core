@@ -282,3 +282,6 @@ __pycache__/
 build/
 
 # End of https://www.gitignore.io/api/visualstudio
+
+!build/*.targets
+!build/*.props
