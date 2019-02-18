@@ -5,7 +5,7 @@
     <Description>eQuantic Core Outcomes Library</Description>
     <Copyright>2019</Copyright>
     <AssemblyTitle>eQuantic.Core.Outcomes</AssemblyTitle>
-    <Version>1.0.0-dev0073</Version>
+    <Version>1.0.0.1</Version>
     <Authors>eQuantic Systems</Authors>
     <TargetFrameworks>net45;net461;net462;netstandard1.6;netstandard2.0</TargetFrameworks>
     <AssemblyName>eQuantic.Core.Outcomes</AssemblyName>

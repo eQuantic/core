@@ -7,7 +7,7 @@ using eQuantic.Core.Outcomes.Results;
 namespace eQuantic.Core.Outcomes.Builder {
     public class PagedListResultBuilder<TItem> : ResultBuilder<PagedListResult<TItem>>
     {
-        public PagedListResultBuilder(PagedListResult<TItem> result) : base(result) {
+        public PagedListResultBuilder() : base(new PagedListResult<TItem>()) {
 		}
 
         public PagedListResultBuilder<TItem> WithSuccess () {

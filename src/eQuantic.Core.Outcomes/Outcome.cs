@@ -5,44 +5,44 @@ namespace eQuantic.Core.Outcomes
 {
     public static class Outcome
     {
-        public static BasicResultBuilder WithBasicResult()
+        public static BasicResultBuilder FromBasicResult()
         {
-            return new BasicResultBuilder(new BasicResult());
+            return new BasicResultBuilder();
         }
 
-        public static BasicResultBuilder WithBasicResult(bool success)
+        public static BasicResultBuilder FromBasicResult(bool success)
         {
-            return success ? WithBasicResult().WithSuccess() : WithBasicResult().WithError();
+            return success ? FromBasicResult().WithSuccess() : FromBasicResult().WithError();
         }
 
-        public static ItemResultBuilder<TItem> WithItemResult<TItem>()
+        public static ItemResultBuilder<TItem> FromItemResult<TItem>()
         {
-            return new ItemResultBuilder<TItem>(new ItemResult<TItem>());
+            return new ItemResultBuilder<TItem>();
         }
 
-        public static ItemResultBuilder<TItem> WithItemResult<TItem>(bool success)
+        public static ItemResultBuilder<TItem> FromItemResult<TItem>(bool success)
         {
-            return success ? WithItemResult<TItem>().WithSuccess() : WithItemResult<TItem>().WithError();
+            return success ? FromItemResult<TItem>().WithSuccess() : FromItemResult<TItem>().WithError();
         }
 
-        public static ListResultBuilder<TItem> WithListResult<TItem>()
+        public static ListResultBuilder<TItem> FromListResult<TItem>()
         {
-            return new ListResultBuilder<TItem>(new ListResult<TItem>());
+            return new ListResultBuilder<TItem>();
         }
 
-        public static ListResultBuilder<TItem> WithListResult<TItem>(bool success)
+        public static ListResultBuilder<TItem> FromListResult<TItem>(bool success)
         {
-            return success ? WithListResult<TItem>().WithSuccess() : WithListResult<TItem>().WithError();
+            return success ? FromListResult<TItem>().WithSuccess() : FromListResult<TItem>().WithError();
         }
 
-        public static PagedListResultBuilder<TItem> WithPagedListResult<TItem>()
+        public static PagedListResultBuilder<TItem> FromPagedListResult<TItem>()
         {
-            return new PagedListResultBuilder<TItem>(new PagedListResult<TItem>());
+            return new PagedListResultBuilder<TItem>();
         }
 
-        public static PagedListResultBuilder<TItem> WithPagedListResult<TItem>(bool success)
+        public static PagedListResultBuilder<TItem> FromPagedListResult<TItem>(bool success)
         {
-            return success ? WithPagedListResult<TItem>().WithSuccess() : WithPagedListResult<TItem>().WithError();
+            return success ? FromPagedListResult<TItem>().WithSuccess() : FromPagedListResult<TItem>().WithError();
         }
     }
 }

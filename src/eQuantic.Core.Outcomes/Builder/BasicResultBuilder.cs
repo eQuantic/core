@@ -6,7 +6,7 @@ using eQuantic.Core.Outcomes.Results;
 namespace eQuantic.Core.Outcomes.Builder {
     public class BasicResultBuilder : ResultBuilder<BasicResult>
     {
-        public BasicResultBuilder(BasicResult result) : base(result) {
+        public BasicResultBuilder() : base(new BasicResult()) {
 		}
 
         public BasicResultBuilder WithSuccess () {

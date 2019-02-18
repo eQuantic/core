@@ -6,7 +6,7 @@ using eQuantic.Core.Outcomes.Results;
 namespace eQuantic.Core.Outcomes.Builder {
     public class ListResultBuilder<TItem> : ResultBuilder<ListResult<TItem>>
     {
-        public ListResultBuilder(ListResult<TItem> result) : base(result) {
+        public ListResultBuilder() : base(new ListResult<TItem>()) {
 		}
 
         public ListResultBuilder<TItem> WithSuccess () {
