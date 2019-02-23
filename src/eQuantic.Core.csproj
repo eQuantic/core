@@ -5,7 +5,7 @@
     <Description>eQuantic Core Library</Description>
     <Copyright>2017</Copyright>
     <AssemblyTitle>eQuantic.Core</AssemblyTitle>
-    <Version>1.4.9.1</Version>
+    <Version>1.4.10.1-dev0003</Version>
     <Authors>eQuantic Systems</Authors>
     <TargetFrameworks>net45;net461;net462;netstandard1.6;netstandard2.0</TargetFrameworks>
     <AssemblyName>eQuantic.Core</AssemblyName>
@@ -13,7 +13,7 @@
     <PackageTags>eQuantic;Core;Library</PackageTags>
     <PackageReleaseNotes>Customed solutions for log, security, dependency injections, ...</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/eQuantic/core</PackageProjectUrl>
-    <PackageOutputPath>../../artifacts/</PackageOutputPath>
+    <PackageOutputPath>../artifacts/</PackageOutputPath>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -24,9 +24,9 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <AssemblyVersion>1.4.9.0</AssemblyVersion>
-    <FileVersion>1.4.9.0</FileVersion>
-    <PackageIconUrl>https://raw.githubusercontent.com/eQuantic/core/master/src/eQuantic.Core/Icon.png</PackageIconUrl>
+    <AssemblyVersion>1.4.10.1</AssemblyVersion>
+    <FileVersion>1.4.10.1</FileVersion>
+    <PackageIconUrl>https://raw.githubusercontent.com/eQuantic/core/master/src/Icon.png</PackageIconUrl>
   </PropertyGroup>
 
 

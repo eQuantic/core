@@ -1,4 +1,6 @@
-﻿namespace eQuantic.Core.Cache
+﻿using System;
+
+namespace eQuantic.Core.Cache
 {
     public interface ICaching
     {
@@ -39,6 +41,14 @@
         /// <param name="key">Nome item</param>
         /// <returns>Objeto tipado</returns>
         T Get<T>(string key);
+
+        /// <summary>
+        /// Recuperar item do Cache
+        /// </summary>
+        /// <param name="type">Tipo</param>
+        /// <param name="key">Nome item</param>
+        /// <returns>Objeto</returns>
+        object Get(Type type, string key);
 
         string[] AllKeys();
     }
