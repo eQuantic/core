@@ -12,7 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eQuantic.Core", "src\eQuantic.Core.csproj", "{E6F4238E-42A3-4A46-B03D-781A76AC919C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eQuantic.Core", "src\eQuantic.Core.csproj", "{E6F4238E-42A3-4A46-B03D-781A76AC919C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eQuantic.Core.Tests", "tests\eQuantic.Core.Tests\eQuantic.Core.Tests.csproj", "{6788A9A8-7DB8-4B9E-8B00-B18D8FECAD8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7227B10E-290D-419B-8279-D6E617711938}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,12 +28,17 @@ Global
 		{E6F4238E-42A3-4A46-B03D-781A76AC919C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6F4238E-42A3-4A46-B03D-781A76AC919C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6F4238E-42A3-4A46-B03D-781A76AC919C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6788A9A8-7DB8-4B9E-8B00-B18D8FECAD8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6788A9A8-7DB8-4B9E-8B00-B18D8FECAD8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6788A9A8-7DB8-4B9E-8B00-B18D8FECAD8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6788A9A8-7DB8-4B9E-8B00-B18D8FECAD8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E6F4238E-42A3-4A46-B03D-781A76AC919C} = {0CA2F610-6D57-4D1F-92E3-EDCCEDAD8297}
+		{6788A9A8-7DB8-4B9E-8B00-B18D8FECAD8B} = {7227B10E-290D-419B-8279-D6E617711938}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0714A2C7-DE4E-4470-83D7-CBC22653FFD4}
