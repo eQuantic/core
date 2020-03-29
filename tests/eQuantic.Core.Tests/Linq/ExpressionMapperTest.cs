@@ -40,7 +40,9 @@ namespace eQuantic.Core.Tests
             Expression<Func<ComplexObject, bool>> expression = o =>
                 o.PropString == "teste" && o.PropInt > 10 && (o.PropDecimal > 0 || o.PropDecimal < 10);
 
-            expression.ToExpressionMapper();
+            var mapper = expression.ToExpressionMapper();
+            
+            
         }
     }
 }
