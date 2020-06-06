@@ -5,7 +5,7 @@
     <Description>eQuantic Core Library</Description>
     <Copyright>2017</Copyright>
     <AssemblyTitle>eQuantic.Core</AssemblyTitle>
-    <Version>1.5.0-dev0008</Version>
+    <Version>1.5.0</Version>
     <Authors>eQuantic Systems</Authors>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>eQuantic.Core</AssemblyName>
@@ -32,8 +32,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="MSBump" Version="2.3.2" PrivateAssets="All" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
