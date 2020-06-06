@@ -15,4 +15,4 @@ jobs:
       - name: Build eQuantic.Core Library
         run: dotnet build --configuration Release
       - name: Push package into Nuget.org
-        run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${{secrets.github_key}} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${{secrets.nuget_key}} -s https://api.nuget.org/v3/index.json
