@@ -10,6 +10,30 @@ namespace eQuantic.Core.Linq.Specification
     public static class ExpressionBuilder
     {
         /// <summary>
+        /// And operator
+        /// </summary>
+        /// <typeparam name="T">Type of params in expression</typeparam>
+        /// <param name="first">Right Expression in AND operation</param>
+        /// <param name="second">Left Expression in And operation</param>
+        /// <returns>New AND expression</returns>
+        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
+        {
+            return first.Compose(second, Expression.And);
+        }
+
+        /// <summary>
+        /// AndAlso operator
+        /// </summary>
+        /// <typeparam name="T">Type of params in expression</typeparam>
+        /// <param name="first">Right Expression in AndAlso operation</param>
+        /// <param name="second">Left Expression in AndAlso operation</param>
+        /// <returns>New AND expression</returns>
+        public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
+        {
+            return first.Compose(second, Expression.AndAlso);
+        }
+
+        /// <summary>
         /// Compose two expressions and merge all in a new expression
         /// </summary>
         /// <typeparam name="T">Type of params in expression</typeparam>
@@ -24,20 +48,10 @@ namespace eQuantic.Core.Linq.Specification
 
             // replace parameters in the second lambda expression with parameters from the first
             var secondBody = ParameterRebinder.ReplaceParameters(map, second.Body);
-            // apply composition of lambda expression bodies to parameters from the first expression 
+            // apply composition of lambda expression bodies to parameters from the first expression
             return Expression.Lambda<T>(merge(first.Body, secondBody), first.Parameters);
         }
-        /// <summary>
-        /// And operator
-        /// </summary>
-        /// <typeparam name="T">Type of params in expression</typeparam>
-        /// <param name="first">Right Expression in AND operation</param>
-        /// <param name="second">Left Expression in And operation</param>
-        /// <returns>New AND expression</returns>
-        public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
-        {
-            return first.Compose(second, Expression.And);
-        }
+
         /// <summary>
         /// Or operator
         /// </summary>
@@ -50,5 +64,16 @@ namespace eQuantic.Core.Linq.Specification
             return first.Compose(second, Expression.Or);
         }
 
+        /// <summary>
+        /// OrElse operator
+        /// </summary>
+        /// <typeparam name="T">Type of param in expression</typeparam>
+        /// <param name="first">Right expression in OrElse operation</param>
+        /// <param name="second">Left expression in OrElse operation</param>
+        /// <returns>New Or expressions</returns>
+        public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> first, Expression<Func<T, bool>> second)
+        {
+            return first.Compose(second, Expression.OrElse);
+        }
     }
 }

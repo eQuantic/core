@@ -1,0 +1,18 @@
+name: eQuantic Core Data
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 2.2.108
+      - name: Build eQuantic.Core Library
+        run: dotnet build --configuration Release
+      - name: Push package into Nuget.org
+        run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${{secrets.github_key}} -s https://api.nuget.org/v3/index.json

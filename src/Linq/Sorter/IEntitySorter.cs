@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace eQuantic.Core.Linq
+namespace eQuantic.Core.Linq.Sorter
 {
     public interface IEntitySorter<TEntity>
     {

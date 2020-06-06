@@ -16,4 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\eQuantic.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Linq" />
+  </ItemGroup>
 </Project>

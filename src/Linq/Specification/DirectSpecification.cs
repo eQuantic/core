@@ -3,40 +3,22 @@ using System.Linq.Expressions;
 
 namespace eQuantic.Core.Linq.Specification
 {
-
-    public sealed class DirectSpecification<TEntity>
-        : Specification<TEntity>
-        where TEntity : class
+    public sealed class DirectSpecification<TEntity> : Specification<TEntity> where TEntity : class
     {
-        #region Members
-
-        Expression<Func<TEntity, bool>> _MatchingCriteria;
-
-        #endregion
-
-        #region Constructor
+        private readonly Expression<Func<TEntity, bool>> matchingCriteria;
 
         public DirectSpecification(Expression<Func<TEntity, bool>> matchingCriteria)
         {
-            if (matchingCriteria == (Expression<Func<TEntity, bool>>)null)
-                throw new ArgumentNullException("nenhum criterio foi informado");
-
-            _MatchingCriteria = matchingCriteria;
+            this.matchingCriteria = matchingCriteria ?? throw new ArgumentNullException(nameof(matchingCriteria), "No criteria were informed.");
         }
 
-        #endregion
-
-        #region Override
-
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public override Expression<Func<TEntity, bool>> SatisfiedBy()
         {
-            return _MatchingCriteria;
+            return matchingCriteria;
         }
-
-        #endregion
     }
 }

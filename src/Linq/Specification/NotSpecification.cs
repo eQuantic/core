@@ -5,31 +5,26 @@ using System.Linq.Expressions;
 namespace eQuantic.Core.Linq.Specification
 {
     /// <summary>
-    /// NotEspecification convert a original
+    /// NotSpecification convert a original
     /// specification with NOT logic operator
     /// </summary>
-    /// <typeparam name="TEntity">Type of element for this specificaiton</typeparam>
+    /// <typeparam name="TEntity">Type of element for this specification</typeparam>
     public sealed class NotSpecification<TEntity>
         : Specification<TEntity>
         where TEntity : class
     {
-        #region Members
-
-        Expression<Func<TEntity, bool>> originalCriteria;
-
-        #endregion
-
-        #region Constructor
+        private readonly Expression<Func<TEntity, bool>> originalCriteria;
 
         /// <summary>
-        /// Constructor for NotSpecificaiton
+        /// Constructor for NotSpecification
         /// </summary>
         /// <param name="originalSpecification">Original specification</param>
         public NotSpecification(ISpecification<TEntity> originalSpecification)
         {
-
-            if (originalSpecification == (ISpecification<TEntity>)null)
-                throw new ArgumentNullException("originalSpecification");
+            if (originalSpecification == null)
+            {
+                throw new ArgumentNullException(nameof(originalSpecification));
+            }
 
             originalCriteria = originalSpecification.SatisfiedBy();
         }
@@ -37,30 +32,19 @@ namespace eQuantic.Core.Linq.Specification
         /// <summary>
         /// Constructor for NotSpecification
         /// </summary>
-        /// <param name="originalSpecification">Original specificaiton</param>
+        /// <param name="originalSpecification">Original specification</param>
         public NotSpecification(Expression<Func<TEntity, bool>> originalSpecification)
         {
-            if (originalSpecification == (Expression<Func<TEntity, bool>>)null)
-                throw new ArgumentNullException("originalSpecification");
-
-            originalCriteria = originalSpecification;
+            originalCriteria = originalSpecification ?? throw new ArgumentNullException(nameof(originalSpecification));
         }
-
-        #endregion
-
-        #region Override Specification methods
 
         /// <summary>
-        /// <see cref="Microsoft.Samples.NLayerApp.Domain.Seedwork.Specification.ISpecification{TEntity}"/>
+        /// <see cref="ISpecification{TEntity}"/>
         /// </summary>
-        /// <returns><see cref="Microsoft.Samples.NLayerApp.Domain.Seedwork.Specification.ISpecification{TEntity}"/></returns>
+        /// <returns><see cref="ISpecification{TEntity}"/></returns>
         public override Expression<Func<TEntity, bool>> SatisfiedBy()
         {
-
-            return Expression.Lambda<Func<TEntity, bool>>(Expression.Not(originalCriteria.Body),
-                                                         originalCriteria.Parameters.Single());
+            return Expression.Lambda<Func<TEntity, bool>>(Expression.Not(originalCriteria.Body), originalCriteria.Parameters.Single());
         }
-
-        #endregion
     }
 }

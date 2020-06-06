@@ -5,36 +5,18 @@ namespace eQuantic.Core.Linq.Specification
 {
     public abstract class Specification<T> : ISpecification<T> where T : class
     {
-        public ISpecification<T> And(ISpecification<T> specification)
+        /// <summary>
+        /// Not specification
+        /// </summary>
+        /// <param name="specification">Specification to negate</param>
+        /// <returns>New specification</returns>
+        public static Specification<T> operator !(Specification<T> specification)
         {
-            return new AndSpecification<T>(this, specification);
+            return new NotSpecification<T>(specification);
         }
-        public ISpecification<T> Or(ISpecification<T> specification)
-        {
-            return new OrSpecification<T>(this, specification);
-        }
-
-        public ISpecification<T> Not()
-        {
-            return new NotSpecification<T>(this);
-        }
-
-        public ISpecification<T> OrNot(ISpecification<T> specification)
-        {
-            return new OrSpecification<T>(this, new NotSpecification<T>(specification));
-        }
-
-        public ISpecification<T> AndNot(ISpecification<T> specification)
-        {
-            return new AndSpecification<T>(this, new NotSpecification<T>(specification));
-        }
-
-        public abstract Expression<Func<T, bool>> SatisfiedBy();
-
-        #region Override Operators
 
         /// <summary>
-        ///  Operador And(&)
+        ///  Operator And
         /// </summary>
         /// <param name="leftSideSpecification">left operand in this AND operation</param>
         /// <param name="rightSideSpecification">right operand in this AND operation</param>
@@ -53,17 +35,6 @@ namespace eQuantic.Core.Linq.Specification
         public static Specification<T> operator |(Specification<T> leftSideSpecification, Specification<T> rightSideSpecification)
         {
             return new OrSpecification<T>(leftSideSpecification, rightSideSpecification);
-            
-        }
-
-        /// <summary>
-        /// Not specification
-        /// </summary>
-        /// <param name="specification">Specification to negate</param>
-        /// <returns>New specification</returns>
-        public static Specification<T> operator !(Specification<T> specification)
-        {
-            return new NotSpecification<T>(specification);
         }
 
         /// <summary>
@@ -86,6 +57,31 @@ namespace eQuantic.Core.Linq.Specification
             return false;
         }
 
-        #endregion
+        public ISpecification<T> And(ISpecification<T> specification)
+        {
+            return new AndSpecification<T>(this, specification);
+        }
+
+        public ISpecification<T> AndNot(ISpecification<T> specification)
+        {
+            return new AndSpecification<T>(this, new NotSpecification<T>(specification));
+        }
+
+        public ISpecification<T> Not()
+        {
+            return new NotSpecification<T>(this);
+        }
+
+        public ISpecification<T> Or(ISpecification<T> specification)
+        {
+            return new OrSpecification<T>(this, specification);
+        }
+
+        public ISpecification<T> OrNot(ISpecification<T> specification)
+        {
+            return new OrSpecification<T>(this, new NotSpecification<T>(specification));
+        }
+
+        public abstract Expression<Func<T, bool>> SatisfiedBy();
     }
 }
