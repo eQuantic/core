@@ -5,7 +5,7 @@
     <Description>eQuantic Core Library</Description>
     <Copyright>2017</Copyright>
     <AssemblyTitle>eQuantic.Core</AssemblyTitle>
-    <Version>1.5.0</Version>
+    <Version>1.5.0.1</Version>
     <Authors>eQuantic Systems</Authors>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>eQuantic.Core</AssemblyName>
@@ -21,12 +21,12 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/eQuantic/core/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/eQuantic/core</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <AssemblyVersion>1.5.0</AssemblyVersion>
-    <FileVersion>1.5.0</FileVersion>
-    <PackageIconUrl>https://raw.githubusercontent.com/eQuantic/core/master/src/Icon.png</PackageIconUrl>
+    <AssemblyVersion>1.5.0.1</AssemblyVersion>
+    <FileVersion>1.5.0.1</FileVersion>
+    <PackageIcon>Icon.png</PackageIcon>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -40,6 +40,7 @@
     <None Include="Icon_details.png" Pack="true" PackagePath="Icon_details.png" />
     <None Include="Icon_dialog.png" Pack="true" PackagePath="Icon_dialog.png" />
     <None Include="Icon_list.png" Pack="true" PackagePath="Icon_list.png" />
+    <None Include="../LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
