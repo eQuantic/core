@@ -11,7 +11,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 2.2.108
+          dotnet-version: 3.1.403
       - name: Build eQuantic.Core Library
         run: dotnet build --configuration Release
       - name: Push package into Nuget.org
