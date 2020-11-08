@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using eQuantic.Core.Linq.Extensions;
 using eQuantic.Core.Linq.Helpers;
 
@@ -16,8 +18,7 @@ namespace eQuantic.Core.Linq.Filter
         /// Initializes a new instance of the <see cref="Filtering{T}"/> class.
         /// </summary>
         public Filtering()
-        {
-        }
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Filtering{T}"/> class.
@@ -25,10 +26,8 @@ namespace eQuantic.Core.Linq.Filter
         /// <param name="expression">The expression.</param>
         /// <param name="stringValue">The string value.</param>
         /// <param name="operator">The operator.</param>
-        public Filtering(Expression<Func<T, object>> expression, string stringValue, FilterOperator @operator = FilterOperator.Equal)
-            : base(GetColumnName(expression), stringValue, @operator)
-        {
-        }
+        public Filtering(Expression<Func<T, object>> expression, string stringValue, FilterOperator @operator = FilterOperator.Equal) : base(GetColumnName(expression), stringValue, @operator)
+        { }
 
         /// <summary>
         /// Sets the column.
@@ -43,8 +42,8 @@ namespace eQuantic.Core.Linq.Filter
         {
             if (!(expression.Body is MemberExpression member))
             {
-                var op = ((UnaryExpression)expression.Body).Operand;
-                member = (MemberExpression)op;
+                var op = ((UnaryExpression) expression.Body).Operand;
+                member = (MemberExpression) op;
             }
             return PropertiesHelper.BuildColumnNameFromMemberExpression(member);
         }
@@ -52,19 +51,59 @@ namespace eQuantic.Core.Linq.Filter
 
     public class Filtering : IFiltering
     {
-        public Filtering()
-        {
-        }
+        public const string DefaultFormat = "{0}:{1}({2})";
+        private const string FuncRegex = @"(\b[^()]+)\((.*)\)$";
 
-        public Filtering(string columnName, string stringValue, FilterOperator @operator = FilterOperator.Equal)
+        public Filtering()
+        { }
+
+        public Filtering(string columnName, string stringValue, FilterOperator? @operator = FilterOperator.Equal)
         {
             this.ColumnName = columnName;
-            this.StringValue = stringValue;
-            this.Operator = @operator;
+
+            if (@operator == null)
+            {
+                var parsedValue = ParseValue(stringValue);
+                this.StringValue = parsedValue.StringValue;
+                this.Operator = parsedValue.Operator;
+            }
+            else
+            {
+                this.StringValue = stringValue;
+                this.Operator = @operator.Value;
+            }
         }
 
         public string ColumnName { get; set; }
         public FilterOperator Operator { get; set; } = FilterOperator.Equal;
         public string StringValue { get; set; }
+
+        public static(FilterOperator Operator, string StringValue) ParseValue(string value)
+        {
+            var match = Regex.Match(value, FuncRegex);
+            if (match.Success && match.Groups.Count == 3)
+            {
+                var @operator = match.Groups[1].Value;
+                var operatorFilter = FilterOperatorValues.GetOperator(@operator);
+                value = match.Groups[2].Value;
+
+                return (operatorFilter, value);
+            }
+
+            return (FilterOperator.Equal, value);
+        }
+
+        public override string ToString()
+        {
+            return this.ToString(DefaultFormat, null);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            format ??= DefaultFormat;
+            formatProvider ??= CultureInfo.InvariantCulture;
+            var @operator = FilterOperatorValues.GetOperator(Operator);
+            return string.Format(formatProvider, format, ColumnName, @operator, StringValue);
+        }
     }
 }
