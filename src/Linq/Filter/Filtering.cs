@@ -17,8 +17,7 @@ namespace eQuantic.Core.Linq.Filter
         /// <summary>
         /// Initializes a new instance of the <see cref="Filtering{T}"/> class.
         /// </summary>
-        public Filtering()
-        { }
+        public Filtering() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Filtering{T}"/> class.
@@ -26,8 +25,7 @@ namespace eQuantic.Core.Linq.Filter
         /// <param name="expression">The expression.</param>
         /// <param name="stringValue">The string value.</param>
         /// <param name="operator">The operator.</param>
-        public Filtering(Expression<Func<T, object>> expression, string stringValue, FilterOperator @operator = FilterOperator.Equal) : base(GetColumnName(expression), stringValue, @operator)
-        { }
+        public Filtering(Expression<Func<T, object>> expression, string stringValue, FilterOperator @operator = FilterOperator.Equal) : base(GetColumnName(expression), stringValue, @operator) { }
 
         /// <summary>
         /// Sets the column.
@@ -54,10 +52,9 @@ namespace eQuantic.Core.Linq.Filter
         public const string DefaultFormat = "{0}:{1}({2})";
         private const string FuncRegex = @"(\b[^()]+)\((.*)\)$";
 
-        public Filtering()
-        { }
+        public Filtering() { }
 
-        public Filtering(string columnName, string stringValue, FilterOperator? @operator = FilterOperator.Equal)
+        public Filtering(string columnName, string stringValue, FilterOperator? @operator = null)
         {
             this.ColumnName = columnName;
 
