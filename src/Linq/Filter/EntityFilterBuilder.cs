@@ -14,11 +14,7 @@ namespace eQuantic.Core.Linq.Filter
             var properties = EntityBuilder.GetProperties<T>(propertyName);
             var keyType = properties.Last().PropertyType;
             var builder = CreateLambdaBuilder(keyType);
-            var convertedValue = value;
-            if (value.GetType() != keyType)
-            {
-                convertedValue = Convert.ChangeType(value, keyType, CultureInfo.InvariantCulture);
-            }
+            var convertedValue = ConvertValue(value, keyType);
             keySelector = builder.BuildLambda(properties, convertedValue, @operator);
         }
 
@@ -47,6 +43,22 @@ namespace eQuantic.Core.Linq.Filter
             var builderType = typeof(LambdaBuilder<,>).MakeGenericType(typeArgs);
 
             return (ILambdaBuilder)Activator.CreateInstance(builderType);
+        }
+        
+        private static object ConvertValue(object value, Type keyType)
+        {
+            if (value.GetType() == keyType) return value;
+            if (string.IsNullOrEmpty(value?.ToString()) && Nullable.GetUnderlyingType(keyType) != null)
+            {
+                return null;
+            }
+
+            if (keyType == typeof(Guid))
+            {
+                return Guid.Parse(value.ToString());
+            }
+
+            return Convert.ChangeType(value, keyType, CultureInfo.InvariantCulture);
         }
     }
 }
