@@ -6,7 +6,6 @@
 
 The **eQuantic Core** composed of several solutions of implementations based on design patterns.
 
-  * Specification Pattern
   * Strategy Pattern
   * Dependency Injection Pattern
 
