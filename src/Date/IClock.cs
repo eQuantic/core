@@ -1,17 +1,16 @@
 using System;
 
-namespace eQuantic.Core.Date
+namespace eQuantic.Core.Date;
+
+// ------------------------------------------------------------------------
+// see http://stackoverflow.com/questions/43711/whats-a-good-way-to-overwrite-datetime-now-during-testing
+public interface IClock
 {
 
-	// ------------------------------------------------------------------------
-	// see http://stackoverflow.com/questions/43711/whats-a-good-way-to-overwrite-datetime-now-during-testing
-	public interface IClock
-	{
+	// ----------------------------------------------------------------------
+	DateTime Now { get; }
 
-		// ----------------------------------------------------------------------
-		DateTime Now { get; }
+} // interface IClock
 
-	} // interface IClock
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

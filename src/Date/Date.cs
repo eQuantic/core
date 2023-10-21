@@ -1,184 +1,183 @@
 using System;
 
-namespace eQuantic.Core.Date
+namespace eQuantic.Core.Date;
+
+// ------------------------------------------------------------------------
+public struct Date : IComparable, IComparable<Date>, IEquatable<Date>
 {
 
-	// ------------------------------------------------------------------------
-	public struct Date : IComparable, IComparable<Date>, IEquatable<Date>
+	// ----------------------------------------------------------------------
+	public Date( DateTime date )
 	{
+		this.date = date.Date;
+	} // Date
 
-		// ----------------------------------------------------------------------
-		public Date( DateTime date )
+	// ----------------------------------------------------------------------
+	public Date( int year, int month = 1, int day = 1 )
+	{
+		if ( year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year )
 		{
-			this.date = date.Date;
-		} // Date
-
-		// ----------------------------------------------------------------------
-		public Date( int year, int month = 1, int day = 1 )
+			throw new ArgumentOutOfRangeException( "year" );
+		}
+		if ( month <= 0 || month > TimeSpec.MonthsPerYear )
 		{
-			if ( year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year )
-			{
-				throw new ArgumentOutOfRangeException( "year" );
-			}
-			if ( month <= 0 || month > TimeSpec.MonthsPerYear )
-			{
-				throw new ArgumentOutOfRangeException( "month" );
-			}
-			if ( day <= 0 || day > TimeSpec.MaxDaysPerMonth )
-			{
-				throw new ArgumentOutOfRangeException( "day" );
-			}
-			date = new DateTime( year, month, day );
-		} // Date
-
-		// ----------------------------------------------------------------------
-		public int Year
+			throw new ArgumentOutOfRangeException( "month" );
+		}
+		if ( day <= 0 || day > TimeSpec.MaxDaysPerMonth )
 		{
-			get { return date.Year; }
-		} // Year
+			throw new ArgumentOutOfRangeException( "day" );
+		}
+		date = new DateTime( year, month, day );
+	} // Date
 
-		// ----------------------------------------------------------------------
-		public int Month
+	// ----------------------------------------------------------------------
+	public int Year
+	{
+		get { return date.Year; }
+	} // Year
+
+	// ----------------------------------------------------------------------
+	public int Month
+	{
+		get { return date.Month; }
+	} // Month
+
+	// ----------------------------------------------------------------------
+	public int Day
+	{
+		get { return date.Day; }
+	} // Day
+
+	// ----------------------------------------------------------------------
+	public DateTime DateTime
+	{
+		get { return date; }
+	} // DateTime
+
+	// ----------------------------------------------------------------------
+	public int CompareTo( Date other )
+	{
+		return date.CompareTo( other.date );
+	} // CompareTo
+
+	// ----------------------------------------------------------------------
+	public int CompareTo( object obj )
+	{
+		return date.CompareTo( ((Date)obj).date );
+	} // CompareTo
+
+	// ----------------------------------------------------------------------
+	public bool Equals( Date other )
+	{
+		return date.Equals( other.date );
+	} // Equals
+
+	// ----------------------------------------------------------------------
+	public override string ToString()
+	{
+		return date.ToString( "d" ); // only the date part
+	} // ToString
+
+	// ----------------------------------------------------------------------
+	public override bool Equals( object obj )
+	{
+		if ( obj == null || GetType() != obj.GetType() )
 		{
-			get { return date.Month; }
-		} // Month
+			return false;
+		}
 
-		// ----------------------------------------------------------------------
-		public int Day
-		{
-			get { return date.Day; }
-		} // Day
+		return Equals( (Date)obj );
+	} // Equals
 
-		// ----------------------------------------------------------------------
-		public DateTime DateTime
-		{
-			get { return date; }
-		} // DateTime
+	// ----------------------------------------------------------------------
+	public override int GetHashCode()
+	{
+		return HashTool.ComputeHashCode( GetType().GetHashCode(), date );
+	} // GetHashCode
 
-		// ----------------------------------------------------------------------
-		public int CompareTo( Date other )
-		{
-			return date.CompareTo( other.date );
-		} // CompareTo
+	// ----------------------------------------------------------------------
+	public static TimeSpan operator -( Date date1, Date date2 )
+	{
+		return date1.date - date2.date;
+	} // operator -
 
-		// ----------------------------------------------------------------------
-		public int CompareTo( object obj )
-		{
-			return date.CompareTo( ((Date)obj).date );
-		} // CompareTo
+	// ----------------------------------------------------------------------
+	public static Date operator -( Date date, TimeSpan duration )
+	{
+		return new Date( date.date - duration );
+	} // operator -
 
-		// ----------------------------------------------------------------------
-		public bool Equals( Date other )
-		{
-			return date.Equals( other.date );
-		} // Equals
+	// ----------------------------------------------------------------------
+	public static Date operator +( Date date, TimeSpan duration )
+	{
+		return new Date( date.date + duration );
+	} // operator +
 
-		// ----------------------------------------------------------------------
-		public override string ToString()
-		{
-			return date.ToString( "d" ); // only the date part
-		} // ToString
+	// ----------------------------------------------------------------------
+	public static bool operator <( Date date1, Date date2 )
+	{
+		return date1.date < date2.date;
+	} // operator <
 
-		// ----------------------------------------------------------------------
-		public override bool Equals( object obj )
-		{
-			if ( obj == null || GetType() != obj.GetType() )
-			{
-				return false;
-			}
+	// ----------------------------------------------------------------------
+	public static bool operator <=( Date date1, Date date2 )
+	{
+		return date1.date <= date2.date;
+	} // operator <=
 
-			return Equals( (Date)obj );
-		} // Equals
+	// ----------------------------------------------------------------------
+	public static bool operator ==( Date left, Date right )
+	{
+		return Equals( left, right );
+	} // operator ==
 
-		// ----------------------------------------------------------------------
-		public override int GetHashCode()
-		{
-			return HashTool.ComputeHashCode( GetType().GetHashCode(), date );
-		} // GetHashCode
+	// ----------------------------------------------------------------------
+	public static bool operator !=( Date left, Date right )
+	{
+		return !Equals( left, right );
+	} // operator !=
 
-		// ----------------------------------------------------------------------
-		public static TimeSpan operator -( Date date1, Date date2 )
-		{
-			return date1.date - date2.date;
-		} // operator -
+	// ----------------------------------------------------------------------
+	public static bool operator >( Date date1, Date date2 )
+	{
+		return date1.date > date2.date;
+	} // operator >
 
-		// ----------------------------------------------------------------------
-		public static Date operator -( Date date, TimeSpan duration )
-		{
-			return new Date( date.date - duration );
-		} // operator -
+	// ----------------------------------------------------------------------
+	public static bool operator >=( Date date1, Date date2 )
+	{
+		return date1.date >= date2.date;
+	} // operator >=
 
-		// ----------------------------------------------------------------------
-		public static Date operator +( Date date, TimeSpan duration )
-		{
-			return new Date( date.date + duration );
-		} // operator +
+	// ----------------------------------------------------------------------
+	public DateTime ToDateTime( Time time )
+	{
+		return ToDateTime( this, time );
+	} // ToDateTime
 
-		// ----------------------------------------------------------------------
-		public static bool operator <( Date date1, Date date2 )
-		{
-			return date1.date < date2.date;
-		} // operator <
+	// ----------------------------------------------------------------------
+	public DateTime ToDateTime( int hour, int minute = 0, int second = 0, int millisecond = 0 )
+	{
+		return ToDateTime( this, hour, minute, second, millisecond );
+	} // ToDateTime
 
-		// ----------------------------------------------------------------------
-		public static bool operator <=( Date date1, Date date2 )
-		{
-			return date1.date <= date2.date;
-		} // operator <=
+	// ----------------------------------------------------------------------
+	public static DateTime ToDateTime( Date date, Time time )
+	{
+		return date.DateTime.Add( time.Duration );
+	} // ToDateTime
 
-		// ----------------------------------------------------------------------
-		public static bool operator ==( Date left, Date right )
-		{
-			return Equals( left, right );
-		} // operator ==
+	// ----------------------------------------------------------------------
+	public static DateTime ToDateTime( Date date, int hour, int minute = 0, int second = 0, int millisecond = 0 )
+	{
+		return new DateTime( date.Year, date.Month, date.Day, hour, minute, second, millisecond );
+	} // ToDateTime
 
-		// ----------------------------------------------------------------------
-		public static bool operator !=( Date left, Date right )
-		{
-			return !Equals( left, right );
-		} // operator !=
+	// ----------------------------------------------------------------------
+	// members
+	private readonly DateTime date;
 
-		// ----------------------------------------------------------------------
-		public static bool operator >( Date date1, Date date2 )
-		{
-			return date1.date > date2.date;
-		} // operator >
+} // struct Date
 
-		// ----------------------------------------------------------------------
-		public static bool operator >=( Date date1, Date date2 )
-		{
-			return date1.date >= date2.date;
-		} // operator >=
-
-		// ----------------------------------------------------------------------
-		public DateTime ToDateTime( Time time )
-		{
-			return ToDateTime( this, time );
-		} // ToDateTime
-
-		// ----------------------------------------------------------------------
-		public DateTime ToDateTime( int hour, int minute = 0, int second = 0, int millisecond = 0 )
-		{
-			return ToDateTime( this, hour, minute, second, millisecond );
-		} // ToDateTime
-
-		// ----------------------------------------------------------------------
-		public static DateTime ToDateTime( Date date, Time time )
-		{
-			return date.DateTime.Add( time.Duration );
-		} // ToDateTime
-
-		// ----------------------------------------------------------------------
-		public static DateTime ToDateTime( Date date, int hour, int minute = 0, int second = 0, int millisecond = 0 )
-		{
-			return new DateTime( date.Year, date.Month, date.Day, hour, minute, second, millisecond );
-		} // ToDateTime
-
-		// ----------------------------------------------------------------------
-		// members
-		private readonly DateTime date;
-
-	} // struct Date
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

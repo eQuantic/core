@@ -1,16 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace eQuantic.Core.Collections
+namespace eQuantic.Core.Collections;
+
+public interface IPagedEnumerable : IEnumerable
 {
-    public interface IPagedEnumerable : IEnumerable
-    {
-        int PageIndex { get; set; }
-        int PageSize { get; set; }
-        long TotalCount { get; set; }
-    }
-    public interface IPagedEnumerable<T> : IPagedEnumerable, IEnumerable<T>
-    {
+    int PageIndex { get; set; }
+    int PageSize { get; set; }
+    long TotalCount { get; set; }
+}
+public interface IPagedEnumerable<T> : IPagedEnumerable, IEnumerable<T>
+{
         
-    }
 }

@@ -1,33 +1,31 @@
-namespace eQuantic.Core.Date
-{
+namespace eQuantic.Core.Date;
 
-    public static class ClockProxy
+public static class ClockProxy
+{
+    public static IClock Clock
     {
-        public static IClock Clock
+        get
         {
-            get
+            if (_clock != null) return _clock;
+            lock (Mutex)
             {
-                if (_clock != null) return _clock;
-                lock (Mutex)
+                if (_clock == null)
                 {
-                    if (_clock == null)
-                    {
-                        _clock = new SystemClock();
-                    }
+                    _clock = new SystemClock();
                 }
-                return _clock;
             }
-            set
+            return _clock;
+        }
+        set
+        {
+            lock (Mutex)
             {
-                lock (Mutex)
-                {
-                    _clock = value;
-                }
+                _clock = value;
             }
         }
-
-        private static readonly object Mutex = new object();
-        private static volatile IClock _clock;
-
     }
+
+    private static readonly object Mutex = new object();
+    private static volatile IClock _clock;
+
 }

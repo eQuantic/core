@@ -1,24 +1,23 @@
 using System;
 
-namespace eQuantic.Core.Date
+namespace eQuantic.Core.Date;
+
+// ------------------------------------------------------------------------
+public class SystemClock : IClock
 {
 
-	// ------------------------------------------------------------------------
-	public class SystemClock : IClock
+	// ----------------------------------------------------------------------
+	internal SystemClock()
 	{
+	} // SystemClock
 
-		// ----------------------------------------------------------------------
-		internal SystemClock()
-		{
-		} // SystemClock
+	// ----------------------------------------------------------------------
+	public DateTime Now
+	{
+		get { return DateTime.Now; }
+	} // Now
 
-		// ----------------------------------------------------------------------
-		public DateTime Now
-		{
-			get { return DateTime.Now; }
-		} // Now
+} // class SystemClock
 
-	} // class SystemClock
-
-} // namespace Itenso.TimePeriod
+// namespace Itenso.TimePeriod
 // -- EOF -------------------------------------------------------------------

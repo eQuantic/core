@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
 
-namespace eQuantic.Core.Extensions
+namespace eQuantic.Core.Extensions;
+
+public static class TextInfoExtensions
 {
-    public static class TextInfoExtensions
-    {
 #if NETSTANDARD1_6
         public static string ToTitleCase(this TextInfo textInfo, string str)
         {
@@ -18,5 +18,4 @@ namespace eQuantic.Core.Extensions
             return string.Join(" ", tokens);
         }
 #endif
-    }
 }

@@ -1,7 +1,6 @@
-﻿namespace eQuantic.Core.Extensions
+﻿namespace eQuantic.Core.Extensions;
+
+public static class DateTimeExtensions
 {
-    public static class DateTimeExtensions
-    {
         
-    }
 }
