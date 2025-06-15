@@ -70,7 +70,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Get all history to allow automatic versioning using MinVer
+          fetch-depth: 0 # Get all history to allow automatic versioning using GitVersion
+
+      # Install GitVersion
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1.1.1
+        with:
+          versionSpec: "6.x"
+
+      # Determine Version
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v1.1.1
+        with:
+          useConfigFile: true
 
       # Install the .NET SDK indicated in the global.json file
       - name: Setup .NET
@@ -85,8 +98,8 @@ jobs:
       - name: Build and Pack
         run: |
           dotnet restore
-          dotnet build --configuration Release --no-restore
-          dotnet pack --configuration Release --no-build --verbosity normal --output ${{ env.NuGetDirectory }}
+          dotnet build --configuration Release --no-restore -p:Version=${{ steps.gitversion.outputs.semVer }} -p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }} -p:FileVersion=${{ steps.gitversion.outputs.assemblySemFileVer }} -p:InformationalVersion=${{ steps.gitversion.outputs.informationalVersion }}
+          dotnet pack --configuration Release --no-build --verbosity normal --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.semVer }}
         env:
           # Enable Source Link
           ContinuousIntegrationBuild: true
@@ -142,6 +155,24 @@ jobs:
     name: Deploy to NuGet.org
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Install GitVersion
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1.1.1
+        with:
+          versionSpec: "6.x"
+
+      # Determine Version
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v1.1.1
+        with:
+          useConfigFile: true
+
       # Download the NuGet package created in the previous job
       - name: Download NuGet package
         uses: actions/download-artifact@v4
@@ -154,6 +185,14 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+
+      # Create Git Tag
+      - name: Create Git Tag
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag "v${{ steps.gitversion.outputs.semVer }}"
+          git push origin "v${{ steps.gitversion.outputs.semVer }}"
 
       # Publish the NuGet package as a symbol package
       # https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg
