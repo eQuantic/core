@@ -20,26 +20,20 @@ public class PagedList<T> : List<T>, IPagedEnumerable<T>
     }
 
     /// <summary>
-    /// One-based index of this subset within the superset.
+    /// Gets or sets the zero-based index of the current page.
     /// </summary>
-    /// <value>
-    /// One-based index of this subset within the superset.
-    /// </value>
+    /// <value>The zero-based page index.</value>
     public int PageIndex { get; set; }
 
     /// <summary>
-    /// Maximum size any individual subset.
+    /// Gets or sets the number of items per page.
     /// </summary>
-    /// <value>
-    /// Maximum size any individual subset.
-    /// </value>
+    /// <value>The page size.</value>
     public int PageSize { get; set; }
 
     /// <summary>
-    /// Total number of objects contained within the superset.
+    /// Gets or sets the total number of items across all pages.
     /// </summary>
-    /// <value>
-    /// Total number of objects contained within the superset.
-    /// </value>
+    /// <value>The total count of items.</value>
     public long TotalCount { get; set; }
 }

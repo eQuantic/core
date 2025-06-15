@@ -198,6 +198,7 @@ public static class StringExtensions
     /// Returns the rightmost (last) character of the string.
     /// </summary>
     /// <param name="src">The source string.</param>
+    /// <returns>The last character of the string.</returns>
     /// <returns>The last character of the string, or null character if the string is empty.</returns>
     public static char Rightmost(this string src)
     {
@@ -257,17 +258,33 @@ public static class StringExtensions
         return src;
     }
 #if !NETSTANDARD1_6
+    /// <summary>
+    /// Capitalizes the name using the current thread's culture, handling Portuguese prepositions correctly.
+    /// </summary>
+    /// <param name="name">The name to capitalize.</param>
+    /// <returns>A properly capitalized name.</returns>
     public static string CapitalizeName(this string name)
     {
         return CapitalizeName(name, Thread.CurrentThread.CurrentCulture);
     }
 #endif
 #if NETSTANDARD1_6
+        /// <summary>
+        /// Capitalizes the name, handling Portuguese prepositions correctly.
+        /// </summary>
+        /// <param name="name">The name to capitalize.</param>
+        /// <returns>A properly capitalized name.</returns>
         public static string CapitalizeName(this string name)
         {
             return CapitalizeName(name, null);
         }
 #endif
+    /// <summary>
+    /// Capitalizes the name using the specified culture, handling Portuguese prepositions correctly.
+    /// </summary>
+    /// <param name="name">The name to capitalize.</param>
+    /// <param name="cultureInfo">The culture to use for capitalization.</param>
+    /// <returns>A properly capitalized name.</returns>
     public static string CapitalizeName(this string name, CultureInfo cultureInfo)
     {
         var textInfo = cultureInfo?.TextInfo;
@@ -419,12 +436,12 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Trims the end using the specified input
+    /// Removes the specified suffix from the end of the string if it exists.
     /// </summary>
-    /// <param name="input">The input</param>
-    /// <param name="suffixToRemove">The suffix to remove</param>
-    /// <param name="comparisonType">The comparison type</param>
-    /// <returns>The input</returns>
+    /// <param name="input">The input string.</param>
+    /// <param name="suffixToRemove">The suffix to remove from the end.</param>
+    /// <param name="comparisonType">The string comparison type to use.</param>
+    /// <returns>The string with the suffix removed, or the original string if the suffix was not found.</returns>
     public static string TrimEnd(this string input, string suffixToRemove,
         StringComparison comparisonType = StringComparison.CurrentCulture)
     {
@@ -437,10 +454,10 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Breaks the lines to array using the specified text
+    /// Splits the text into an array of lines, removing empty entries.
     /// </summary>
-    /// <param name="text">The text</param>
-    /// <returns>The string array</returns>
+    /// <param name="text">The text to split into lines.</param>
+    /// <returns>An array of strings representing the lines in the text.</returns>
     public static string[] BreakLinesToArray(this string text)
     {
         return text.Split(StringConstants.BreakLines, StringSplitOptions.RemoveEmptyEntries);
@@ -490,10 +507,10 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Validate IPv4
+    /// Validates whether the string represents a valid IPv4 address.
     /// </summary>
-    /// <param name="ipString"></param>
-    /// <returns></returns>
+    /// <param name="ipString">The string to validate as an IPv4 address.</param>
+    /// <returns><c>true</c> if the string is a valid IPv4 address; otherwise, <c>false</c>.</returns>
     public static bool IsValidIPv4(this string ipString)
     {
         if (string.IsNullOrWhiteSpace(ipString))

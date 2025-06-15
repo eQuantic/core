@@ -38,11 +38,21 @@ public static class EnumExtension
         return Enum.GetValues(typeof(T)).Cast<T>().ToList();
     }
 
+    /// <summary>
+    /// Gets all flags that are set in the specified enum value.
+    /// </summary>
+    /// <param name="value">The enum value to get flags from.</param>
+    /// <returns>An enumerable collection of all flags that are set in the value.</returns>
     public static IEnumerable<Enum> GetFlags(this Enum value)
     {
         return GetFlags(value, Enum.GetValues(value.GetType()).Cast<Enum>().ToArray());
     }
 
+    /// <summary>
+    /// Gets all individual flags that are set in the specified enum value, excluding composite flags.
+    /// </summary>
+    /// <param name="value">The enum value to get individual flags from.</param>
+    /// <returns>An enumerable collection of individual flags that are set in the value.</returns>
     public static IEnumerable<Enum> GetIndividualFlags(this Enum value)
     {
         return GetFlags(value, GetFlagValues(value.GetType()).ToArray());

@@ -1,19 +1,15 @@
 ﻿namespace eQuantic.Core.Security.Encryption;
 
 /// <summary>
-/// The Encrypting interface.
+/// Defines methods for encryption and random string generation.
 /// </summary>
 public interface IEncrypting
 {
     /// <summary>
-    /// The encode.
+    /// Encodes a password using a hashing algorithm.
     /// </summary>
-    /// <param name="password">
-    /// The source.
-    /// </param>
-    /// <returns>
-    /// The <see cref="string"/>.
-    /// </returns>
+    /// <param name="password">The password to encode.</param>
+    /// <returns>The encoded password as a string.</returns>
     string Encode(string password);
 
     /// <summary>

@@ -5,19 +5,15 @@ using System.Text;
 namespace eQuantic.Core.Security.Encryption;
 
 /// <summary>
-/// The encryptor.
+/// Provides encryption functionality using MD5 hashing and random string generation.
 /// </summary>
 public class Encryptor : IEncrypting
 {
     /// <summary>
-    /// The encode.
+    /// Encodes a password using MD5 hashing algorithm.
     /// </summary>
-    /// <param name="password">
-    /// The source.
-    /// </param>
-    /// <returns>
-    /// The <see cref="string"/>.
-    /// </returns>
+    /// <param name="password">The password to encode.</param>
+    /// <returns>The MD5 hash of the password as a hexadecimal string.</returns>
     public string Encode(string password)
     {
         var md5 = MD5.Create();
