@@ -312,18 +312,16 @@ public sealed class DateDiff
 			elapsedHours = (int)date2.Subtract( compareDate ).TotalHours;
 			return elapsedHours.Value;
 		}
-	} // ElapsedHours
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Gets the total number of minutes in the date difference.
 	/// </summary>
 	public int Minutes
 	{
 		get { return (int)Math.Round( Round( difference.TotalMinutes ) ); }
-	} // Minutes
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Gets the number of elapsed minutes in the date difference, excluding full years, months, days, and hours.
 	/// This represents the remaining minutes after subtracting complete years, months, days, and hours.
@@ -340,18 +338,16 @@ public sealed class DateDiff
 			}
 			return elapsedMinutes.Value;
 		}
-	} // ElapsedMinutes
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Gets the total number of seconds in the date difference.
 	/// </summary>
 	public int Seconds
 	{
 		get { return (int)Math.Round( Round( difference.TotalSeconds ) ); }
-	} // Seconds
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Gets the number of elapsed seconds in the date difference, excluding all larger time units.
 	/// This represents the remaining seconds after subtracting complete years, months, days, hours, and minutes.
@@ -372,9 +368,8 @@ public sealed class DateDiff
 			}
 			return elapsedSeconds.Value;
 		}
-	} // ElapsedSeconds
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Gets a formatted description of the date difference using the specified precision and formatter.
 	/// </summary>
@@ -414,9 +409,8 @@ public sealed class DateDiff
 			elapsedItems[ 3 ],
 			elapsedItems[ 4 ],
 			elapsedItems[ 5 ] );
-	} // GetDescription
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Returns a string representation of the date difference using the default formatter.
 	/// </summary>
@@ -424,9 +418,8 @@ public sealed class DateDiff
 	public override string ToString()
 	{
 		return GetDescription();
-	} // ToString
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Determines whether the specified object is equal to the current DateDiff instance.
 	/// </summary>
@@ -450,9 +443,8 @@ public sealed class DateDiff
 		       date1 == comp.date1 &&
 		       date2 == comp.date2 &&
 		       difference == comp.difference;
-	} // Equals
+	}
 
-	// ----------------------------------------------------------------------
 	/// <summary>
 	/// Returns the hash code for this DateDiff instance.
 	/// </summary>
@@ -466,9 +458,8 @@ public sealed class DateDiff
 			date1,
 			date2,
 			difference );
-	} // GetHashCode
+	}
 
-	// ----------------------------------------------------------------------
 	private static double Round( double number )
 	{
 		if ( number >= 0.0 )
@@ -476,9 +467,8 @@ public sealed class DateDiff
 			return Math.Floor( number );
 		}
 		return -Math.Floor( -number );
-	} // Round
+	}
 
-	// ----------------------------------------------------------------------
 	private int CalcYears()
 	{
 		if ( TimeCompare.IsSameMonth( date1, date2 ) )
@@ -509,7 +499,7 @@ public sealed class DateDiff
 			}
 		}
 		return Year2 - calendar.GetYear( compareDate );
-	} // CalcYears
+	}
 
 	private int CalcQuarters()
 	{
@@ -527,7 +517,7 @@ public sealed class DateDiff
 		return
 			( ( year2 * TimeSpec.QuartersPerYear ) + quarter2 ) -
 			( ( year1 * TimeSpec.QuartersPerYear ) + quarter1 );
-	} // CalcQuarters
+	}
 
 	private int CalcMonths()
 	{
@@ -562,7 +552,7 @@ public sealed class DateDiff
 		return
 			( ( Year2 * TimeSpec.MonthsPerYear ) + Month2 ) -
 			( ( calendar.GetYear( compareDate ) * TimeSpec.MonthsPerYear ) + calendar.GetMonth( compareDate ) );
-	} // CalcMonths
+	}
 
 	private int CalcWeeks()
 	{
@@ -579,7 +569,7 @@ public sealed class DateDiff
 		}
 
 		return (int)( week2.Subtract( week1 ).TotalDays / TimeSpec.DaysPerWeek );
-	} // CalcWeeks
+	}
 
 	private readonly Calendar calendar;
 	private readonly YearMonth yearBaseMonth;
