@@ -52,11 +52,19 @@ public struct ShortGuid : IComparable, IComparable<ShortGuid>, IEquatable<ShortG
 
 	#region Methods
 
+	/// <summary>
+	/// Returns the underlying Guid value.
+	/// </summary>
+	/// <returns>The Guid representation of this ShortGuid.</returns>
 	public Guid ToGuid()
 	{
 		return _guid;
 	}
 
+	/// <summary>
+	/// Sets the underlying Guid value and updates the string representation.
+	/// </summary>
+	/// <param name="value">The Guid value to set.</param>
 	public void SetGuid(Guid value)
 	{
 		if (value != _guid)
@@ -66,6 +74,10 @@ public struct ShortGuid : IComparable, IComparable<ShortGuid>, IEquatable<ShortG
 		}
 	}
 
+	/// <summary>
+	/// Sets the string value and updates the underlying Guid.
+	/// </summary>
+	/// <param name="value">The base64 encoded string value to set.</param>
 	public void SetValue(string value)
 	{
 		if (value != _value)
@@ -253,16 +265,31 @@ public struct ShortGuid : IComparable, IComparable<ShortGuid>, IEquatable<ShortG
 		return new ShortGuid(guid);
 	}
 
+	/// <summary>
+	/// Compares this instance to a specified object and returns an indication of their relative values.
+	/// </summary>
+	/// <param name="obj">An object to compare, or null.</param>
+	/// <returns>A signed number indicating the relative values of this instance and obj.</returns>
 	public int CompareTo(object obj)
 	{
 		return _guid.CompareTo(((ShortGuid)obj).ToGuid());
 	}
 
+	/// <summary>
+	/// Compares this instance to a specified ShortGuid object and returns an indication of their relative values.
+	/// </summary>
+	/// <param name="other">A ShortGuid object to compare to this instance.</param>
+	/// <returns>A signed number indicating the relative values of this instance and other.</returns>
 	public int CompareTo(ShortGuid other)
 	{
 		return _guid.CompareTo(other.ToGuid());
 	}
 
+	/// <summary>
+	/// Returns a value indicating whether this instance and a specified ShortGuid object represent the same value.
+	/// </summary>
+	/// <param name="other">A ShortGuid object to compare to this instance.</param>
+	/// <returns>true if other is equal to this instance; otherwise, false.</returns>
 	public bool Equals(ShortGuid other)
 	{
 		return this == other;

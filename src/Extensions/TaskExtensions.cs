@@ -33,10 +33,17 @@ public static class TaskExtensions
         return new TaskExtensions.CultureAwaiter(task);
     }
 
+    /// <summary>
+    /// Provides a culture-aware awaiter for Task&lt;T&gt; that preserves the current culture and UI culture.
+    /// </summary>
+    /// <typeparam name="T">The type of the task result.</typeparam>
     public struct CultureAwaiter<T> : ICriticalNotifyCompletion, INotifyCompletion
     {
         private readonly Task<T> _task;
 
+        /// <summary>
+        /// Gets a value indicating whether the underlying task has completed.
+        /// </summary>
         public bool IsCompleted
         {
             get
@@ -45,26 +52,46 @@ public static class TaskExtensions
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the CultureAwaiter struct.
+        /// </summary>
+        /// <param name="task">The task to wrap with culture preservation.</param>
         public CultureAwaiter(Task<T> task)
         {
             this._task = task;
         }
 
+        /// <summary>
+        /// Gets the awaiter for this culture-aware task.
+        /// </summary>
+        /// <returns>The culture awaiter instance.</returns>
         public TaskExtensions.CultureAwaiter<T> GetAwaiter()
         {
             return this;
         }
 
+        /// <summary>
+        /// Gets the result of the underlying task.
+        /// </summary>
+        /// <returns>The task result.</returns>
         public T GetResult()
         {
             return this._task.GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Schedules the continuation action to be invoked when the task completes.
+        /// </summary>
+        /// <param name="continuation">The action to invoke when the task completes.</param>
         public void OnCompleted(Action continuation)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Schedules the continuation action to be invoked when the task completes, preserving the current culture.
+        /// </summary>
+        /// <param name="continuation">The action to invoke when the task completes.</param>
         public void UnsafeOnCompleted(Action continuation)
         {
             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
@@ -88,10 +115,16 @@ public static class TaskExtensions
         }
     }
 
+    /// <summary>
+    /// Provides a culture-aware awaiter for Task that preserves the current culture and UI culture.
+    /// </summary>
     public struct CultureAwaiter : ICriticalNotifyCompletion, INotifyCompletion
     {
         private readonly Task _task;
 
+        /// <summary>
+        /// Gets a value indicating whether the underlying task has completed.
+        /// </summary>
         public bool IsCompleted
         {
             get
@@ -100,26 +133,45 @@ public static class TaskExtensions
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the CultureAwaiter struct.
+        /// </summary>
+        /// <param name="task">The task to wrap with culture preservation.</param>
         public CultureAwaiter(Task task)
         {
             this._task = task;
         }
 
+        /// <summary>
+        /// Gets the awaiter for this culture-aware task.
+        /// </summary>
+        /// <returns>The culture awaiter instance.</returns>
         public TaskExtensions.CultureAwaiter GetAwaiter()
         {
             return this;
         }
 
+        /// <summary>
+        /// Gets the result of the underlying task.
+        /// </summary>
         public void GetResult()
         {
             this._task.GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// Schedules the continuation action to be invoked when the task completes.
+        /// </summary>
+        /// <param name="continuation">The action to invoke when the task completes.</param>
         public void OnCompleted(Action continuation)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Schedules the continuation action to be invoked when the task completes, preserving the current culture.
+        /// </summary>
+        /// <param name="continuation">The action to invoke when the task completes.</param>
         public void UnsafeOnCompleted(Action continuation)
         {
             CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;

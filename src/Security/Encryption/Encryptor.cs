@@ -31,7 +31,11 @@ public class Encryptor : IEncrypting
         return sb.ToString();
     }
 
-
+    /// <summary>
+    /// Generates a random string of the specified length using alphanumeric characters.
+    /// </summary>
+    /// <param name="length">The length of the random string to generate.</param>
+    /// <returns>A random string containing letters and digits.</returns>
     public string Random(int length)
     {
         string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
