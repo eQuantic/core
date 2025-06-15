@@ -1,7 +1,7 @@
 mode: ContinuousDeployment
-major-version-bump-message: '\+semver:\s?(breaking|major)'
-minor-version-bump-message: '\+semver:\s?(feature|minor)'
-patch-version-bump-message: '\+semver:\s?(fix|patch)'
+major-version-bump-message: '\+semver:\s?(breaking|major)|^(feat|fix|perf)(\(.+\))?!:'
+minor-version-bump-message: '\+semver:\s?(feature|minor)|^feat(\(.+\))?:'
+patch-version-bump-message: '\+semver:\s?(fix|patch)|^(fix|perf|refactor|style|test|docs|chore)(\(.+\))?:'
 no-bump-message: '\+semver:\s?(none|skip)'
 commit-message-incrementing: Enabled
 tag-prefix: "v"
