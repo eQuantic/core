@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -83,6 +84,13 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Returns the substring to the right of the nth occurrence of the specified character.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="c">The character to search for.</param>
+    /// <param name="n">The occurrence number (1-based).</param>
+    /// <returns>The substring to the right of the nth occurrence of the character, or an empty string if not found.</returns>
     public static string RightOf(this string src, char c, int n)
     {
         string ret = String.Empty;
@@ -106,6 +114,12 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Returns the substring to the left of the rightmost occurrence of the specified character.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="c">The character to search for.</param>
+    /// <returns>The substring to the left of the rightmost occurrence of the character, or the original string if not found.</returns>
     public static string LeftOfRightmostOf(this string src, char c)
     {
         string ret = src;
@@ -118,6 +132,12 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Returns the substring to the right of the rightmost occurrence of the specified character.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="c">The character to search for.</param>
+    /// <returns>The substring to the right of the rightmost occurrence of the character, or an empty string if not found.</returns>
     public static string RightOfRightmostOf(this string src, char c)
     {
         string ret = String.Empty;
@@ -130,6 +150,13 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Returns the substring between the first occurrence of the start character and the first occurrence of the end character after the start.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="start">The start character.</param>
+    /// <param name="end">The end character.</param>
+    /// <returns>The substring between the characters, or an empty string if not found.</returns>
     public static string Between(this string src, char start, char end)
     {
         string ret = String.Empty;
@@ -147,6 +174,12 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Counts the number of occurrences of the specified character in the string.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="find">The character to count.</param>
+    /// <returns>The number of occurrences of the character.</returns>
     public static int Count(this string src, char find)
     {
         int ret = 0;
@@ -161,6 +194,11 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Returns the rightmost (last) character of the string.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <returns>The last character of the string, or null character if the string is empty.</returns>
     public static char Rightmost(this string src)
     {
         char c = '\0';
@@ -172,11 +210,22 @@ public static class StringExtensions
         return c;
     }
 
+    /// <summary>
+    /// Repeats the string the specified number of times.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="multiplier">The number of times to repeat the string.</param>
+    /// <returns>A string containing the source string repeated the specified number of times.</returns>
     public static string Multiply(this string src, int multiplier)
     {
         return String.Concat(Enumerable.Repeat(src, multiplier));
     }
 #if !NETSTANDARD1_6
+    /// <summary>
+    /// Removes diacritics (accent marks) from the string.
+    /// </summary>
+    /// <param name="text">The input string.</param>
+    /// <returns>A string with diacritics removed.</returns>
     public static string RemoveDiacritics(this string text)
     {
         return string.Concat(
@@ -186,6 +235,13 @@ public static class StringExtensions
         ).Normalize(NormalizationForm.FormC);
     }
 #endif
+    /// <summary>
+    /// Removes or replaces special characters in the string.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="replacement">The character to use as replacement. Defaults to underscore.</param>
+    /// <param name="charsToRemove">Additional characters to remove.</param>
+    /// <returns>A string with special characters removed or replaced.</returns>
     public static string RemoveSpecialCharacters(this string src, char replacement = '_',
         params char[] charsToRemove)
     {
@@ -280,6 +336,11 @@ public static class StringExtensions
         return html;
     }
 
+    /// <summary>
+    /// Trims the string and replaces multiple consecutive whitespace characters with a single space.
+    /// </summary>
+    /// <param name="inString">The input string to process.</param>
+    /// <returns>A string with normalized whitespace.</returns>
     public static string SingleSpacedTrim(this string inString)
     {
         StringBuilder sb = new StringBuilder();
@@ -321,6 +382,11 @@ public static class StringExtensions
         return source.IndexOf(toCheck, comp) >= 0;
     }
 
+    /// <summary>
+    /// Converts the string to title case (first letter of each word capitalized).
+    /// </summary>
+    /// <param name="str">The input string.</param>
+    /// <returns>A string in title case format.</returns>
     public static string ToTitleCase(this string str)
     {
         var tokens = str.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
@@ -333,6 +399,12 @@ public static class StringExtensions
         return string.Join(" ", tokens);
     }
 
+    /// <summary>
+    /// Splits the string by inserting a separator before each capital letter.
+    /// </summary>
+    /// <param name="str">The input string.</param>
+    /// <param name="separator">The separator character to insert. Defaults to space.</param>
+    /// <returns>A string with separators inserted before capital letters.</returns>
     public static string SplitOnCapitals(this string str, char separator = ' ')
     {
         var newstring = "";
@@ -375,11 +447,11 @@ public static class StringExtensions
     }
 
 
-    /// <summary>  
-    /// Removes all accents from the input string.  
-    /// </summary>  
-    /// <param name="text">The input string.</param>  
-    /// <returns></returns>  
+    /// <summary>
+    /// Removes all accents from the input string.
+    /// </summary>
+    /// <param name="text">The input string.</param>
+    /// <returns>A string with all accents removed.</returns>
     public static string RemoveAccents(this string text)
     {
         if (string.IsNullOrWhiteSpace(text))
@@ -390,13 +462,13 @@ public static class StringExtensions
         return new string(chars).Normalize(NormalizationForm.FormC);
     }
 
-    /// <summary>  
-    /// Turn a string into a slug by removing all accents,   
-    /// special characters, additional spaces, substituting   
-    /// spaces with hyphens & making it lower-case.  
-    /// </summary>  
-    /// <param name="phrase">The string to turn into a slug.</param>  
-    /// <returns></returns>  
+    /// <summary>
+    /// Turn a string into a slug by removing all accents,
+    /// special characters, additional spaces, substituting
+    /// spaces with hyphens and making it lower-case.
+    /// </summary>
+    /// <param name="phrase">The string to turn into a slug.</param>
+    /// <returns>A slugified version of the input string.</returns>
     public static string Slugify(this string? phrase)
     {
         if (string.IsNullOrEmpty(phrase)) return string.Empty;

@@ -39,7 +39,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     
     <!-- Source Link -->
-    <DebugType>embedded</DebugType>
+    <DebugType>portable</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

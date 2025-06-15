@@ -2,8 +2,17 @@
 
 namespace eQuantic.Core.Collections;
 
+/// <summary>
+/// Represents a paged list that implements IPagedEnumerable interface.
+/// </summary>
+/// <typeparam name="T">The type of elements in the list.</typeparam>
 public class PagedList<T> : List<T>, IPagedEnumerable<T>
 {
+    /// <summary>
+    /// Initializes a new instance of the PagedList class.
+    /// </summary>
+    /// <param name="collection">The collection of items to include in this page.</param>
+    /// <param name="total">The total number of items across all pages.</param>
     public PagedList(IEnumerable<T> collection, long total) : base(collection)
     {
         PageSize = (int)total;

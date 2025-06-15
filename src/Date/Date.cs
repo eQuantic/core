@@ -2,17 +2,28 @@ using System;
 
 namespace eQuantic.Core.Date;
 
-// ------------------------------------------------------------------------
+/// <summary>
+/// Represents a date without time information, providing date-only operations and comparisons.
+/// </summary>
 public struct Date : IComparable, IComparable<Date>, IEquatable<Date>
 {
 
-	// ----------------------------------------------------------------------
+	/// <summary>
+	/// Initializes a new instance of the Date struct from a DateTime value.
+	/// </summary>
+	/// <param name="date">The DateTime value to extract the date from.</param>
 	public Date( DateTime date )
 	{
 		this.date = date.Date;
 	} // Date
 
-	// ----------------------------------------------------------------------
+	/// <summary>
+	/// Initializes a new instance of the Date struct with the specified year, month, and day.
+	/// </summary>
+	/// <param name="year">The year (must be between DateTime.MinValue.Year and DateTime.MaxValue.Year).</param>
+	/// <param name="month">The month (1-12). Defaults to 1.</param>
+	/// <param name="day">The day (1-31). Defaults to 1.</param>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when year, month, or day is out of valid range.</exception>
 	public Date( int year, int month = 1, int day = 1 )
 	{
 		if ( year < DateTime.MinValue.Year || year > DateTime.MaxValue.Year )
@@ -30,19 +41,25 @@ public struct Date : IComparable, IComparable<Date>, IEquatable<Date>
 		date = new DateTime( year, month, day );
 	} // Date
 
-	// ----------------------------------------------------------------------
+	/// <summary>
+	/// Gets the year component of the date.
+	/// </summary>
 	public int Year
 	{
 		get { return date.Year; }
 	} // Year
 
-	// ----------------------------------------------------------------------
+	/// <summary>
+	/// Gets the month component of the date.
+	/// </summary>
 	public int Month
 	{
 		get { return date.Month; }
 	} // Month
 
-	// ----------------------------------------------------------------------
+	/// <summary>
+	/// Gets the day component of the date.
+	/// </summary>
 	public int Day
 	{
 		get { return date.Day; }

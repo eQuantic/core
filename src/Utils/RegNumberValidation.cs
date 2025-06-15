@@ -2,8 +2,16 @@
 
 namespace eQuantic.Core.Utils;
 
+/// <summary>
+/// Provides validation methods for registration numbers.
+/// </summary>
 public static class RegNumberValidation
 {
+    /// <summary>
+    /// Validates a Brazilian CPF (Cadastro de Pessoas Físicas) number.
+    /// </summary>
+    /// <param name="cpf">The CPF number to validate.</param>
+    /// <returns>True if the CPF is valid; otherwise, false.</returns>
     public static bool CpfIsValid(string cpf)
     {
         Regex reg = new Regex(@"[^0-9]");
