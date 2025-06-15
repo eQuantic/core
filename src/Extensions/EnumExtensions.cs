@@ -6,8 +6,16 @@ using System.Reflection;
 
 namespace eQuantic.Core.Extensions;
 
+/// <summary>
+/// Provides extension methods for <see cref="Enum"/> types.
+/// </summary>
 public static class EnumExtension
 {
+    /// <summary>
+    /// Gets the description of an enum value from the <see cref="DescriptionAttribute"/> if available, otherwise returns the enum name.
+    /// </summary>
+    /// <param name="value">The enum value.</param>
+    /// <returns>The description of the enum value, or the enum name if no description is available.</returns>
     public static string GetDescription(this Enum value)
     {
 #if NETSTANDARD1_6
@@ -19,6 +27,12 @@ public static class EnumExtension
         return attribute == null ? value.ToString() : attribute.Description;
     }
 
+    /// <summary>
+    /// Gets a list of all values for the specified enum type.
+    /// </summary>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <param name="en">The enum instance (used for type inference).</param>
+    /// <returns>A list containing all values of the specified enum type.</returns>
     public static List<T> GetList<T>(this Enum en)
     {
         return Enum.GetValues(typeof(T)).Cast<T>().ToList();

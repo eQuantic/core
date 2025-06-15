@@ -7,13 +7,27 @@ using System.Threading.Tasks;
 
 namespace eQuantic.Core.Extensions;
 
+/// <summary>
+/// Provides extension methods for <see cref="Task"/> and <see cref="Task{T}"/> to handle culture preservation.
+/// </summary>
 public static class TaskExtensions
 {
+    /// <summary>
+    /// Creates a culture-aware awaiter that preserves the current culture and UI culture across async operations.
+    /// </summary>
+    /// <typeparam name="T">The type of the task result.</typeparam>
+    /// <param name="task">The task to wrap.</param>
+    /// <returns>A culture-aware awaiter that preserves the current thread's culture.</returns>
     public static TaskExtensions.CultureAwaiter<T> WithCurrentCulture<T>(this Task<T> task)
     {
         return new TaskExtensions.CultureAwaiter<T>(task);
     }
 
+    /// <summary>
+    /// Creates a culture-aware awaiter that preserves the current culture and UI culture across async operations.
+    /// </summary>
+    /// <param name="task">The task to wrap.</param>
+    /// <returns>A culture-aware awaiter that preserves the current thread's culture.</returns>
     public static TaskExtensions.CultureAwaiter WithCurrentCulture(this Task task)
     {
         return new TaskExtensions.CultureAwaiter(task);

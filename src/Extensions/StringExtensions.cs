@@ -9,6 +9,9 @@ using eQuantic.Core.Constants;
 
 namespace eQuantic.Core.Extensions;
 
+/// <summary>
+/// Provides extension methods for <see cref="string"/> objects.
+/// </summary>
 public static class StringExtensions
 {
     private static readonly Regex Tags = new Regex(@"<[^>]+?>", RegexOptions.Multiline);
@@ -16,6 +19,12 @@ public static class StringExtensions
     //add characters that are should not be removed to this regex
     private static readonly Regex NotOkCharacter = new Regex(@"[^\w;&#@.:/\\?=|%!() -]");
 
+    /// <summary>
+    /// Returns the substring to the left of the first occurrence of the specified character.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="c">The character to search for.</param>
+    /// <returns>The substring to the left of the character, or the original string if the character is not found.</returns>
     public static string LeftOf(this string src, char c)
     {
         string ret = src;
@@ -28,6 +37,13 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Returns the substring to the left of the nth occurrence of the specified character.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="c">The character to search for.</param>
+    /// <param name="n">The occurrence number (1-based).</param>
+    /// <returns>The substring to the left of the nth occurrence of the character, or the original string if not found.</returns>
     public static string LeftOf(this string src, char c, int n)
     {
         string ret = src;
@@ -49,6 +65,12 @@ public static class StringExtensions
         return ret;
     }
 
+    /// <summary>
+    /// Returns the substring to the right of the first occurrence of the specified character.
+    /// </summary>
+    /// <param name="src">The source string.</param>
+    /// <param name="c">The character to search for.</param>
+    /// <returns>The substring to the right of the character, or an empty string if the character is not found.</returns>
     public static string RightOf(this string src, char c)
     {
         string ret = String.Empty;
@@ -217,6 +239,11 @@ public static class StringExtensions
         return sout.ToString().Trim();
     }
 
+    /// <summary>
+    /// Removes HTML tags and decodes HTML/URL encoded content from the string.
+    /// </summary>
+    /// <param name="html">The HTML string to clean.</param>
+    /// <returns>A plain text string with HTML removed and content decoded.</returns>
     public static string UnHtml(this string html)
     {
         html = WebUtility.UrlDecode(html);
@@ -282,6 +309,13 @@ public static class StringExtensions
         return sb.ToString().Trim();
     }
 
+    /// <summary>
+    /// Determines whether the string contains the specified substring using the specified comparison type.
+    /// </summary>
+    /// <param name="source">The string to search in.</param>
+    /// <param name="toCheck">The substring to search for.</param>
+    /// <param name="comp">The comparison type to use.</param>
+    /// <returns><c>true</c> if the substring is found; otherwise, <c>false</c>.</returns>
     public static bool Contains(this string source, string toCheck, StringComparison comp)
     {
         return source.IndexOf(toCheck, comp) >= 0;
