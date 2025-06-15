@@ -35,15 +35,15 @@ jobs:
             7.0.x
             8.0.x
 
-          # Create the NuGet package in the folder from the environment variable NuGetDirectory
-    - name: Build and Pack
-      run: |
-        dotnet restore
-        dotnet build --configuration Release --no-restore
-        dotnet pack --configuration Release --no-build --verbosity normal --output ${{ env.NuGetDirectory }}
-      env:
-        # Enable Source Link
-        ContinuousIntegrationBuild: true
+      # Create the NuGet package in the folder from the environment variable NuGetDirectory
+      - name: Build and Pack
+        run: |
+          dotnet restore
+          dotnet build --configuration Release --no-restore
+          dotnet pack --configuration Release --no-build --verbosity normal --output ${{ env.NuGetDirectory }}
+        env:
+          # Enable Source Link
+          ContinuousIntegrationBuild: true
 
       # Upload the NuGet package as an artifact, so they can be used in the following jobs
       - name: Upload NuGet package
@@ -79,12 +79,12 @@ jobs:
       - name: Install nuget validator
         run: dotnet tool update Meziantou.Framework.NuGetPackageValidation.Tool --global
 
-          # Validate metadata and content of the NuGet package
-    # https://www.nuget.org/packages/Meziantou.Framework.NuGetPackageValidation.Tool#readme-body-tab
-    # If some rules are not applicable, you can disable them
-    # using the --excluded-rules or --excluded-rule-ids option
-    - name: Validate package
-      run: meziantou.validate-nuget-package (Get-ChildItem "${{ env.NuGetDirectory }}/*.nupkg") --excluded-rule-ids 111
+      # Validate metadata and content of the NuGet package
+      # https://www.nuget.org/packages/Meziantou.Framework.NuGetPackageValidation.Tool#readme-body-tab
+      # If some rules are not applicable, you can disable them
+      # using the --excluded-rules or --excluded-rule-ids option
+      - name: Validate package
+        run: meziantou.validate-nuget-package (Get-ChildItem "${{ env.NuGetDirectory }}/*.nupkg") --excluded-rule-ids 111
 
   run_test:
     runs-on: ubuntu-latest
