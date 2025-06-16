@@ -74,14 +74,14 @@ jobs:
 
       # Install GitVersion
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3.0.0
+        uses: gittools/actions/gitversion/setup@v3.2.1
         with:
           versionSpec: "6.0.x"
 
       # Determine Version
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.0.0
+        uses: gittools/actions/gitversion/execute@v3.2.1
         with:
           useConfigFile: true
 
@@ -162,14 +162,14 @@ jobs:
 
       # Install GitVersion
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3.0.0
+        uses: gittools/actions/gitversion/setup@v3.2.1
         with:
           versionSpec: "6.0.x"
 
       # Determine Version
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.0.0
+        uses: gittools/actions/gitversion/execute@v3.2.1
         with:
           useConfigFile: true
 
