@@ -29,8 +29,8 @@ jobs:
         with:
           dotnet-version: |
             6.0.x
-            7.0.x
             8.0.x
+            10.0.x
 
       - name: Restore dependencies
         run: dotnet restore
@@ -91,8 +91,8 @@ jobs:
         with:
           dotnet-version: |
             6.0.x
-            7.0.x
             8.0.x
+            10.0.x
 
       # Create the NuGet package in the folder from the environment variable NuGetDirectory
       - name: Build and Pack
@@ -124,8 +124,8 @@ jobs:
         with:
           dotnet-version: |
             6.0.x
-            7.0.x
             8.0.x
+            10.0.x
 
       # Download the NuGet package created in the previous job
       - name: Download NuGet package
@@ -184,15 +184,21 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
-      # Create Git Tag
+      # Create Git Tag (skip if already exists)
       - name: Create Git Tag
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git tag "v${{ steps.gitversion.outputs.semVer }}"
-          git push origin "v${{ steps.gitversion.outputs.semVer }}"
+          $tagName = "v${{ steps.gitversion.outputs.semVer }}"
+          $tagExists = git tag -l $tagName
+          if ($tagExists) {
+            Write-Host "Tag $tagName already exists, skipping creation"
+          } else {
+            git tag $tagName
+            git push origin $tagName
+          }
 
       # Publish the NuGet package as a symbol package
       # https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg

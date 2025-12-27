@@ -6,7 +6,7 @@
     <Copyright>2017</Copyright>
     <AssemblyTitle>eQuantic.Core</AssemblyTitle>
     <Authors>eQuantic Systems</Authors>
-    <TargetFrameworks>netstandard2.1;net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net6.0;net8.0;net10.0</TargetFrameworks>
     <AssemblyName>eQuantic.Core</AssemblyName>
     <PackageId>eQuantic.Core</PackageId>
     <PackageTags>eQuantic;Core;Library</PackageTags>
@@ -44,8 +44,8 @@
     <None Include="Icon_details.png" Pack="true" PackagePath="Icon_details.png" />
     <None Include="Icon_dialog.png" Pack="true" PackagePath="Icon_dialog.png" />
     <None Include="Icon_list.png" Pack="true" PackagePath="Icon_list.png" />
-    <None Include="../LICENSE" Pack="true" PackagePath="" />
-    <None Include="../README.md" Pack="true" PackagePath="README.md" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="" />
+    <None Include="../../README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 
   <ItemGroup>

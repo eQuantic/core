@@ -3,9 +3,16 @@
 [![NuGet](https://img.shields.io/nuget/v/eQuantic.Core.svg)](https://www.nuget.org/packages/eQuantic.Core/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/eQuantic.Core.svg)](https://www.nuget.org/packages/eQuantic.Core/)
 [![License](https://img.shields.io/github/license/eQuantic/core.svg)](https://github.com/eQuantic/core/blob/master/LICENSE)
-[![.NET](https://img.shields.io/badge/.NET-netstandard2.1%20%7C%20net6.0%20%7C%20net7.0%20%7C%20net8.0-blue.svg)](https://github.com/eQuantic/core)
+[![.NET](https://img.shields.io/badge/.NET-netstandard2.1%20%7C%20net6.0%20%7C%20net8.0%20%7C%20net10.0-blue.svg)](https://github.com/eQuantic/core)
 
-**eQuantic Core** is a comprehensive .NET library that provides a rich set of utilities, extensions, and design pattern implementations to enhance your applications. This library serves as the foundation for the entire eQuantic ecosystem, offering essential functionality that supports various other eQuantic packages.
+**eQuantic Core** is a comprehensive .NET library that provides a rich set of utilities, extensions, and design pattern implementations to enhance your applications. This library serves as the foundation for the entire eQuantic ecosystem.
+
+## 📦 Packages
+
+| Package                  | Description                                                          | NuGet                                                                                                                         |
+| ------------------------ | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `eQuantic.Core`          | Core utilities, extensions, collections                              | [![NuGet](https://img.shields.io/nuget/v/eQuantic.Core.svg)](https://www.nuget.org/packages/eQuantic.Core/)                   |
+| `eQuantic.Core.Eventing` | Base eventing abstractions (IEvent, IEventHandler, IEventDispatcher) | [![NuGet](https://img.shields.io/nuget/v/eQuantic.Core.Eventing.svg)](https://www.nuget.org/packages/eQuantic.Core.Eventing/) |
 
 ## 🚀 Features
 
@@ -193,8 +200,8 @@ public class MyService
 
 - .NET Standard 2.1
 - .NET 6.0
-- .NET 7.0
 - .NET 8.0
+- .NET 10.0
 
 ## 🤝 Contributing
 
@@ -208,8 +215,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 eQuantic Core is part of the eQuantic ecosystem. Check out these related packages:
 
-- [eQuantic.Core.Data](https://github.com/eQuantic/core-data) - Data access patterns and repositories
-- [eQuantic.Core.Data.EntityFramework](https://github.com/eQuantic/core-data-entityframework) - Entity Framework implementation
+- [eQuantic.Core.CQS](https://github.com/eQuantic/core-cqs) - CQS/CQRS pattern with Mediator, Sagas, Outbox
+- [eQuantic.Core.DomainEvents](https://github.com/eQuantic/core-domainevents) - Domain Events for DDD
+- [eQuantic.Core.Api](https://github.com/eQuantic/core-api) - API, Domain, Application layers
+- [eQuantic.Core.Api.Crud](https://github.com/eQuantic/core-api-crud) - CRUD operations
 
 ## 📞 Support
 
@@ -217,4 +226,4 @@ For support, please visit our [GitHub Issues](https://github.com/eQuantic/core/i
 
 ---
 
-**eQuantic Systems** - Building the future, one component at a time.
+**eQuantic Tech** - Building the future, one component at a time.

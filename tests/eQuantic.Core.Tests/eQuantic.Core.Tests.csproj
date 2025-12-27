@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\eQuantic.Core.csproj" />
+    <ProjectReference Include="..\..\src\eQuantic.Core\eQuantic.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
