@@ -22,6 +22,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Testcontainers.RabbitMq" Version="4.1.0" />
+    <PackageReference Include="Testcontainers.Kafka" Version="4.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.2" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
     <ProjectReference Include="../../src/eQuantic.Core.Eventing/eQuantic.Core.Eventing.csproj" />
     <ProjectReference Include="../../src/eQuantic.Core.Eventing.RabbitMQ/eQuantic.Core.Eventing.RabbitMQ.csproj" />
     <ProjectReference Include="../../src/eQuantic.Core.Eventing.Outbox/eQuantic.Core.Eventing.Outbox.csproj" />
+    <ProjectReference Include="../../src/eQuantic.Core.Eventing.Kafka/eQuantic.Core.Eventing.Kafka.csproj" />
   </ItemGroup>
 
 </Project>
