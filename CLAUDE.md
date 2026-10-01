@@ -9,3 +9,11 @@ The specs and changes of this repository live in the central store,
 CLI run here act on the store. Pull it before starting (`git -C ../equantic-specs pull --rebase`),
 and follow its `CLAUDE.md` for how a change flows. Never create `openspec/specs` or
 `openspec/changes` here: a local planning root would quietly take this repository off the store.
+
+Apply a change by its name (`/opsx:apply <change>`): the store holds every product's changes, and an
+apply with no name can pick another workstream's.
+
+On a machine without the store, set it up once beside this repository, with OpenSpec 1.14.0 or later
+(`npm install -g @fission-ai/openspec@1.14.0`): `git clone git@github.com:eQuantic/equantic-specs.git
+../equantic-specs`, then `openspec store register ../equantic-specs`. `openspec doctor` checks the
+whole chain and prints the fix for whatever is missing.
