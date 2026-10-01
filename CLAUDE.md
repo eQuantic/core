@@ -1,0 +1,11 @@
+# eQuantic.Core
+
+## Specs (OpenSpec)
+
+The specs and changes of this repository live in the central store,
+[eQuantic/equantic-specs](https://github.com/eQuantic/equantic-specs), under `openspec/specs/core/`
+([the `core` workstream](https://github.com/eQuantic/equantic-specs/blob/main/workstreams/core.md)).
+`openspec/config.yaml` here only points there, so `/opsx:propose`, `/opsx:apply` and the `openspec`
+CLI run here act on the store. Pull it before starting (`git -C ../equantic-specs pull --rebase`),
+and follow its `CLAUDE.md` for how a change flows. Never create `openspec/specs` or
+`openspec/changes` here: a local planning root would quietly take this repository off the store.
