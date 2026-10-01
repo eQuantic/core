@@ -1,4 +1,5 @@
-# Planning lives in the central OpenSpec store, eQuantic/equantic-specs, under
-# openspec/specs/core/. This file only points there: the store's own config.yaml holds the
-# context and the rules, and this repository keeps no openspec/specs or openspec/changes.
+# Planning lives in the central OpenSpec store, eQuantic/equantic-specs: specs under
+# openspec/specs/core/, changes under openspec/changes/. This file only points there: the
+# store's own config.yaml holds the context and the rules, and this repository keeps no
+# openspec/specs or openspec/changes.
 store: equantic-specs
